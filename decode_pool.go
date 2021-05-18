@@ -49,6 +49,8 @@ func borrowDecoder(r io.Reader, bufSize int) *Decoder {
 	dec.r = r
 	dec.length = 0
 	dec.isPooled = 0
+	dec.disableStrictUnicode = false
+	dec.skipArrayDataBlock = false
 	if bufSize > 0 {
 		dec.data = make([]byte, bufSize)
 	}

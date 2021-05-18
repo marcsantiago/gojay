@@ -1,8 +1,14 @@
 package gojay
 
 import (
+	"unicode"
 	"unicode/utf16"
 	"unicode/utf8"
+)
+
+var (
+	invalidCodePoint = InvalidJSONError("Invalid unicode code point")
+	invalidJson      = InvalidJSONError("Invalid JSON")
 )
 
 func (dec *Decoder) getUnicode() (rune, error) {
@@ -17,7 +23,7 @@ func (dec *Decoder) getUnicode() (rune, error) {
 		} else if c >= 'A' && c <= 'F' {
 			r = r*16 + rune(c-'A'+10)
 		} else {
-			return 0, InvalidJSONError("Invalid unicode code point")
+			return 0, invalidCodePoint
 		}
 		i++
 	}
@@ -39,7 +45,7 @@ func (dec *Decoder) appendEscapeChar(str []byte, c byte) ([]byte, error) {
 	case '\\':
 		str = append(str, '\\')
 	default:
-		return nil, InvalidJSONError("Invalid JSON")
+		return nil, invalidJson
 	}
 	return str, nil
 }
@@ -48,6 +54,13 @@ func (dec *Decoder) parseUnicode() ([]byte, error) {
 	// get unicode after u
 	r, err := dec.getUnicode()
 	if err != nil {
+		if err == invalidCodePoint {
+			if dec.disableStrictUnicode {
+				str := make([]byte, 3)
+				utf8.EncodeRune(str, unicode.ReplacementChar)
+				return str, nil
+			}
+		}
 		return nil, err
 	}
 	// no error start making new string
