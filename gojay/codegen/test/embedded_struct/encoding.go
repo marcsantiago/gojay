@@ -3,8 +3,9 @@
 package embedded_struct
 
 import (
-	"github.com/francoispqt/gojay"
 	"time"
+
+	"github.com/marcsantiago/gojay"
 )
 
 type Ints []int

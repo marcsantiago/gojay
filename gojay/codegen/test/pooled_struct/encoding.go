@@ -3,9 +3,10 @@
 package pooled_struct
 
 import (
-	"github.com/francoispqt/gojay"
 	"sync"
 	"time"
+
+	"github.com/marcsantiago/gojay"
 )
 
 func init() {

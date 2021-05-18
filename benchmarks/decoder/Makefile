@@ -4,7 +4,7 @@ test:
 
 .PHONY: bench
 bench: 
-	go test -benchmem -run=^$ github.com/francoispqt/gojay/benchmarks/decoder -bench ^Benchmark
+	go test -benchmem -run=^$ github.com/marcsantiago/gojay/benchmarks/decoder -bench ^Benchmark
 
 .PHONY: benchtrace
 benchtrace:
@@ -12,11 +12,11 @@ benchtrace:
 
 .PHONY: benchcpu
 benchcpu: 
-	go test -benchmem -run=^$ github.com/francoispqt/gojay/benchmarks/decoder -bench ^Benchmark -cpuprofile cpu.out
+	go test -benchmem -run=^$ github.com/marcsantiago/gojay/benchmarks/decoder -bench ^Benchmark -cpuprofile cpu.out
 
 .PHONY: testtrace
 testtrace: 
-	go test -benchmem -run=^$ github.com/francoispqt/gojay/benchmarks/decoder -bench ^Benchmark -trace trace.out
+	go test -benchmem -run=^$ github.com/marcsantiago/gojay/benchmarks/decoder -bench ^Benchmark -trace trace.out
 
 .PHONY: benchgojay
 benchgojay:

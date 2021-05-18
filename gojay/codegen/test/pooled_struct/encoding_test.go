@@ -2,10 +2,11 @@ package pooled_struct
 
 import (
 	"bytes"
-	"github.com/francoispqt/gojay"
+	"testing"
+
+	"github.com/marcsantiago/gojay"
 	"github.com/stretchr/testify/assert"
 	"github.com/viant/assertly"
-	"testing"
 )
 
 func TestMessage_Unmarshal(t *testing.T) {

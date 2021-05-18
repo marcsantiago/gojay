@@ -4,8 +4,9 @@ package basic_struct
 
 import (
 	"database/sql"
-	"github.com/francoispqt/gojay"
 	"time"
+
+	"github.com/marcsantiago/gojay"
 )
 
 type SubMessagesPtr []*SubMessage
