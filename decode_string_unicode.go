@@ -9,6 +9,9 @@ import (
 var (
 	invalidCodePoint = InvalidJSONError("Invalid unicode code point")
 	invalidJson      = InvalidJSONError("Invalid JSON")
+
+	unicodeReplacement = make([]byte, 3)
+	_                  = utf8.EncodeRune(unicodeReplacement, unicode.ReplacementChar)
 )
 
 func (dec *Decoder) getUnicode() (rune, error) {
@@ -56,9 +59,7 @@ func (dec *Decoder) parseUnicode() ([]byte, error) {
 	if err != nil {
 		if err == invalidCodePoint {
 			if dec.disableStrictUnicode {
-				str := make([]byte, 3)
-				utf8.EncodeRune(str, unicode.ReplacementChar)
-				return str, nil
+				return unicodeReplacement, nil
 			}
 		}
 		return nil, err
