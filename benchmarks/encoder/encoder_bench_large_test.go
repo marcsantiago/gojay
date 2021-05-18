@@ -5,10 +5,10 @@ import (
 	"log"
 	"testing"
 
-	"github.com/francoispqt/gojay"
-	"github.com/francoispqt/gojay/benchmarks"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/mailru/easyjson"
+	"github.com/marcsantiago/gojay"
+	"github.com/marcsantiago/gojay/benchmarks"
 )
 
 func BenchmarkEncodingJsonEncodeLargeStruct(b *testing.B) {

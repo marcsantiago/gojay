@@ -7,10 +7,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
 	"github.com/viant/toolbox"
 )
 
-const gojayPackage = "github.com/francoispqt/gojay"
+const gojayPackage = "github.com/marcsantiago/gojay"
 
 // Generator holds the content to generate the gojay code
 type Generator struct {

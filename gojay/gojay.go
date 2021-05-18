@@ -2,8 +2,9 @@ package main
 
 import (
 	"flag"
-	"github.com/francoispqt/gojay/gojay/codegen"
 	"log"
+
+	"github.com/marcsantiago/gojay/gojay/codegen"
 )
 
 var pkg = flag.String("pkg", "", "the package name of the generated file")

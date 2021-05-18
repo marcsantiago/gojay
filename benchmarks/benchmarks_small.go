@@ -1,6 +1,6 @@
 package benchmarks
 
-import "github.com/francoispqt/gojay"
+import "github.com/marcsantiago/gojay"
 
 var SmallFixture = []byte(`{"st": 1,"sid": 486,"tt": "active","gr": 0,"uuid": "de305d54-75b4-431b-adb2-eb6b9e546014","ip": "127.0.0.1","ua": "user_agent","tz": -6,"v": 1}`)
 

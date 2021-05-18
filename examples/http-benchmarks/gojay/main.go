@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/francoispqt/gojay"
+	"github.com/marcsantiago/gojay"
 )
 
 func main() {
