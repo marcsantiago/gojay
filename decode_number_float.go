@@ -145,7 +145,7 @@ func (dec *Decoder) getFloat() (float64, error) {
 					}
 					dec.cursor = i + 1
 					pow := pow10uint64[expI]
-					floatVal := float64(beforeDecimal) + float64(afterDecimal)/float64(pow)
+					floatVal := (float64(beforeDecimal) + float64(afterDecimal)) / float64(pow)
 					exp, err := dec.getExponent()
 					if err != nil {
 						return 0, err
@@ -353,7 +353,7 @@ func (dec *Decoder) getFloat32() (float32, error) {
 					pow := pow10uint64[expI]
 					// then we add both integers
 					// then we divide the number by the power found
-					floatVal := float32(beforeDecimal) + float32(afterDecimal)/float32(pow)
+					floatVal := (float32(beforeDecimal) + float32(afterDecimal)) / float32(pow)
 					exp, err := dec.getExponent()
 					if err != nil {
 						return 0, err
@@ -388,7 +388,7 @@ func (dec *Decoder) getFloat32() (float32, error) {
 				afterDecimal = dec.atoi64(start, end)
 			}
 			pow := pow10uint64[expI]
-			return float32(beforeDecimal) + float32(afterDecimal)/float32(pow), nil
+			return (float32(beforeDecimal) + float32(afterDecimal)) / float32(pow), nil
 		case 'e', 'E':
 			dec.cursor = j + 1
 			// we get part before decimal as integer
