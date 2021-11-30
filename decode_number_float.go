@@ -170,16 +170,15 @@ func (dec *Decoder) getFloat() (float64, error) {
 			expI := end - start + 2
 			// if exp is too long, it means number is too long, just truncate the number
 			if expI >= len(pow10uint64) || expI < 0 {
-				expI = 19
+				expI = len(pow10uint64) - 2
 				afterDecimal = dec.atoi64(start, start+expI-2)
 			} else {
 				afterDecimal = dec.atoi64(start, end)
 			}
-
 			pow := pow10uint64[expI]
 			// then we add both integers
 			// then we divide the number by the power found
-			return float64(beforeDecimal+afterDecimal) / float64(pow), nil
+			return (float64(beforeDecimal) + float64(afterDecimal)) / float64(pow), nil
 		case 'e', 'E':
 			dec.cursor = j + 1
 			// we get part before decimal as integer
