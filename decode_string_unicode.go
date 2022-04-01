@@ -96,6 +96,11 @@ func (dec *Decoder) parseUnicode() ([]byte, error) {
 		dec.cursor++
 		r2, err := dec.getUnicode()
 		if err != nil {
+			if err == invalidCodePoint {
+				if dec.disableStrictUnicode {
+					return unicodeReplacement, nil
+				}
+			}
 			return nil, err
 		}
 		combined := utf16.DecodeRune(r, r2)
