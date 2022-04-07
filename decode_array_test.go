@@ -459,7 +459,7 @@ func TestDecodeSliceInvalidType(t *testing.T) {
 	err := UnmarshalJSONArray([]byte(`{}`), &result)
 	assert.NotNil(t, err, "err should not be nil")
 	assert.IsType(t, InvalidUnmarshalError(""), err, "err should be of type InvalidUnmarshalError")
-	assert.Equal(t, "Cannot unmarshal JSON to type '*gojay.testSliceObjects'", err.Error(), "err should not be nil")
+	assert.Equal(t, "cannot unmarshal JSON to type '*gojay.testSliceObjects'", err.Error(), "err should not be nil")
 }
 
 func TestDecoderChannelOfObjectsBasic(t *testing.T) {

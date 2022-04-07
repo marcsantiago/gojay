@@ -371,7 +371,7 @@ func (dec *Decoder) read() bool {
 			n, err = dec.r.Read(dec.data[dec.length:])
 			if err != nil {
 				if err != io.EOF {
-					dec.err = err
+					dec.err = isTimeOut(err)
 					return false
 				}
 				if n == 0 {

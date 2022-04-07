@@ -2,9 +2,17 @@ package gojay
 
 import (
 	"bytes"
+	"context"
+	"crypto/tls"
 	"fmt"
+	"math/rand"
+	"net"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -528,4 +536,101 @@ func TestUnmarshalJSONObjects(t *testing.T) {
 			testCase.expectations(err, testCase.v, t)
 		})
 	}
+}
+
+func TestDecodeFromHTTPResponseCancelled(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping this test in short mode")
+	}
+	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		var responseData = `{"test": "%s"}`
+		responseData = fmt.Sprintf(responseData, _generateStringData())
+		buf := _chunk([]byte(responseData), 1<<(10*2))
+		for i := 0; i < len(buf); i++ {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				_, _ = w.Write(buf[i])
+			}
+			time.Sleep(time.Millisecond * 100)
+		}
+	})
+
+	httpClient, teardown := testingHTTPClient(h)
+	defer teardown()
+
+	testCases := []struct {
+		name         string
+		v            *testDecodeObj
+		expectations func(err error, v interface{}, t *testing.T)
+	}{
+		{
+			"test decode object null",
+			new(testDecodeObj),
+			func(err error, v interface{}, t *testing.T) {
+				assert.NotNil(t, err, "err must not be nil")
+				assert.Condition(t, func() bool {
+					return strings.Contains(err.Error(), "client.Timeout or context cancellation while reading body")
+				}, fmt.Sprintf("Expected error %v to be network related and say (client.Timeout or context cancellation while reading body)", err))
+			},
+		},
+	}
+	for _, testCase := range testCases {
+		testCase := testCase
+		t.Run(testCase.name, func(*testing.T) {
+			req, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, "http://localhost.com", nil)
+			res, _ := httpClient.Do(req)
+
+			decoder := BorrowDecoder(res.Body)
+			defer decoder.Release()
+
+			err = decoder.DecodeObject(testCase.v)
+			testCase.expectations(err, testCase.v, t)
+		})
+	}
+}
+
+func testingHTTPClient(handler http.Handler) (*http.Client, func()) {
+	s := httptest.NewServer(handler)
+	cli := &http.Client{
+		Transport: &http.Transport{
+			DialContext: func(_ context.Context, network, _ string) (net.Conn, error) {
+				return net.Dial(network, s.Listener.Addr().String())
+			},
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+		Timeout: time.Millisecond * 500,
+	}
+	return cli, s.Close
+}
+
+func _generateStringData() string {
+	var sizeMB = 10 << (10 * 2) // 10 mb
+	block := make([]byte, sizeMB)
+	_fakeDataGenerator(block)
+	return string(block)
+}
+
+func _fakeDataGenerator(block []byte) {
+	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	for i, _ := range block {
+		block[i] = letters[rand.Intn(len(letters))]
+	}
+	return
+}
+
+func _chunk(buf []byte, lim int) [][]byte {
+	var chunk []byte
+	chunks := make([][]byte, 0, len(buf)/lim+1)
+	for len(buf) >= lim {
+		chunk, buf = buf[:lim], buf[lim:]
+		chunks = append(chunks, chunk)
+	}
+	if len(buf) > 0 {
+		chunks = append(chunks, buf[:len(buf)])
+	}
+	return chunks
 }

@@ -33,7 +33,7 @@ func ExampleUnmarshal_invalidType() {
 	someStruct := struct{}{}
 	err := gojay.Unmarshal(data, &someStruct)
 
-	fmt.Println(err) // "Cannot unmarshal JSON to type '*struct{}'"
+	fmt.Println(err) // "cannot unmarshal JSON to type '*struct{}'"
 }
 
 func ExampleDecoder_Decode_string() {
