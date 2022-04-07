@@ -3,9 +3,10 @@ package gojay
 import (
 	"errors"
 	"fmt"
+	"net"
 )
 
-const invalidJSONCharErrorMsg = "Invalid JSON, wrong char '%c' found at position %d"
+const invalidJSONCharErrorMsg = "invalid JSON, wrong char '%c' found at position %d"
 
 // InvalidJSONError is a type representing an error returned when
 // Decoding encounters invalid JSON.
@@ -20,6 +21,11 @@ func (dec *Decoder) raiseInvalidJSONErr(pos int) error {
 	if len(dec.data) > pos {
 		c = dec.data[pos]
 	}
+
+	if dec.err == ErrReaderTimeOut {
+		return ErrReaderTimeOut
+	}
+
 	dec.err = InvalidJSONError(
 		fmt.Sprintf(
 			invalidJSONCharErrorMsg,
@@ -30,7 +36,7 @@ func (dec *Decoder) raiseInvalidJSONErr(pos int) error {
 	return dec.err
 }
 
-const invalidUnmarshalErrorMsg = "Cannot unmarshal JSON to type '%T'"
+const invalidUnmarshalErrorMsg = "cannot unmarshal JSON to type '%T'"
 
 // InvalidUnmarshalError is a type representing an error returned when
 // Decoding cannot unmarshal JSON to the receiver type for various reasons.
@@ -49,7 +55,7 @@ func (dec *Decoder) makeInvalidUnmarshalErr(v interface{}) error {
 	)
 }
 
-const invalidMarshalErrorMsg = "Invalid type %T provided to Marshal"
+const invalidMarshalErrorMsg = "invalid type %T provided to marshal"
 
 // InvalidMarshalError is a type representing an error returned when
 // Encoding did not find the proper way to encode
@@ -85,4 +91,16 @@ func (err InvalidUsagePooledEncoderError) Error() string {
 
 // ErrUnmarshalPtrExpected is the error returned when unmarshal expects a pointer value,
 // When using `dec.ObjectNull` or `dec.ArrayNull` for example.
-var ErrUnmarshalPtrExpected = errors.New("Cannot unmarshal to given value, a pointer is expected")
+var ErrUnmarshalPtrExpected = errors.New("cannot unmarshal to given value, a pointer is expected")
+
+// ErrReaderTimeOut indicates that the body could not be completed consumed because the Reader from the HTTP network response was closed as a
+// result of network timeouts or manual context cancellation
+var ErrReaderTimeOut = errors.New("client.Timeout or context cancellation while reading body")
+
+// isTimeOut helper to determine if the body was prematurely closed as a result of a client timeout
+func isTimeOut(err error) error {
+	if tErr, ok := err.(net.Error); ok && tErr.Timeout() {
+		return ErrReaderTimeOut
+	}
+	return err
+}

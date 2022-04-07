@@ -399,7 +399,7 @@ func TestEncoderObjectEncodeAPIError(t *testing.T) {
 		enc := NewEncoder(builder)
 		err := enc.EncodeObject(&testObjectWithUnknownType{struct{}{}})
 		assert.NotNil(t, err, "Error should not be nil")
-		assert.Equal(t, "Invalid type struct {} provided to Marshal", err.Error(), "err.Error() should be 'Invalid type struct {} provided to Marshal'")
+		assert.Equal(t, "invalid type struct {} provided to marshal", err.Error(), "err.Error() should be 'invalid type struct {} provided to marshal'")
 	})
 	t.Run("write-error", func(t *testing.T) {
 		w := TestWriterError("")
@@ -623,7 +623,7 @@ func TestEncodeObjectWithKeys(t *testing.T) {
 		enc := NewEncoder(builder)
 		err := enc.EncodeObjectKeys(&testObjectWithUnknownType{struct{}{}}, []string{})
 		assert.NotNil(t, err, "Error should not be nil")
-		assert.Equal(t, "Invalid type struct {} provided to Marshal", err.Error(), "err.Error() should be 'Invalid type struct {} provided to Marshal'")
+		assert.Equal(t, "invalid type struct {} provided to marshal", err.Error(), "err.Error() should be 'invalid type struct {} provided to marshal'")
 	})
 	t.Run("encode-object-with-keys", func(t *testing.T) {
 		b := &strings.Builder{}
