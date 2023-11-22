@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/marcsantiago/gojay.svg?branch=master)](https://travis-ci.org/marcsantiago/gojay)
-[![codecov](https://codecov.io/gh/marcsantiago/gojay/branch/master/graph/badge.svg)](https://codecov.io/gh/marcsantiago/gojay)
+[![Go](https://github.com/marcsantiago/gojay/actions/workflows/go.yml/badge.svg)](https://github.com/marcsantiago/gojay/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/marcsantiago/gojay)](https://goreportcard.com/report/github.com/marcsantiago/gojay)
 [![Go doc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square
 )](https://godoc.org/github.com/marcsantiago/gojay)
@@ -9,7 +8,7 @@
 
 # GoJay
 
-<img src="https://github.com/marcsantiago/gojay/raw/master/gojay.png" width="200px">
+<img src="https://github.com/marcsantiago/gojay/raw/main/gojay.png" width="200px">
 
 GoJay is a performant JSON encoder/decoder for Golang (currently the most performant, [see benchmarks](#benchmark-results)).
 
