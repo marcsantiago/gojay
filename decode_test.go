@@ -542,11 +542,11 @@ func TestDecodeFromHTTPResponseCancelled(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping this test in short mode")
 	}
+
+	var responseData = `{"test": "%s"}`
+	responseData = fmt.Sprintf(responseData, _generateStringData())
 	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-
-		var responseData = `{"test": "%s"}`
-		responseData = fmt.Sprintf(responseData, _generateStringData())
 		buf := _chunk([]byte(responseData), 1<<(10*2))
 		for i := 0; i < len(buf); i++ {
 			select {
@@ -559,18 +559,15 @@ func TestDecodeFromHTTPResponseCancelled(t *testing.T) {
 		}
 	})
 
-	httpClient, teardown := testingHTTPClient(h)
-	defer teardown()
-
 	testCases := []struct {
 		name         string
-		v            *testDecodeObj
+		object       *testDecodeObj
 		expectations func(err error, v interface{}, t *testing.T)
 	}{
 		{
-			"test decode object null",
-			new(testDecodeObj),
-			func(err error, v interface{}, t *testing.T) {
+			name:   "test decode object null",
+			object: new(testDecodeObj),
+			expectations: func(err error, v interface{}, t *testing.T) {
 				assert.NotNil(t, err, "err must not be nil")
 				assert.Condition(t, func() bool {
 					return strings.Contains(err.Error(), "client.Timeout or context cancellation while reading body")
@@ -579,16 +576,29 @@ func TestDecodeFromHTTPResponseCancelled(t *testing.T) {
 		},
 	}
 	for _, testCase := range testCases {
-		testCase := testCase
 		t.Run(testCase.name, func(*testing.T) {
-			req, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, "http://localhost.com", nil)
-			res, _ := httpClient.Do(req)
+			httpClient, teardown := testingHTTPClient(h)
+			defer teardown()
+
+			ctx := context.Background()
+			ctx, cancel := context.WithTimeout(ctx, time.Millisecond*500)
+			defer cancel()
+
+			req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://localhost.com", nil)
+			if err != nil {
+				t.Fatalf("Error creating request: %v", err)
+			}
+
+			res, errClient := httpClient.Do(req)
+			if errClient != nil {
+				t.Fatalf("Error sending request: %v", errClient)
+			}
 
 			decoder := BorrowDecoder(res.Body)
 			defer decoder.Release()
 
-			err = decoder.DecodeObject(testCase.v)
-			testCase.expectations(err, testCase.v, t)
+			err = decoder.DecodeObject(testCase.object)
+			testCase.expectations(err, testCase.object, t)
 		})
 	}
 }
@@ -602,7 +612,6 @@ func testingHTTPClient(handler http.Handler) (*http.Client, func()) {
 			},
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		},
-		Timeout: time.Millisecond * 500,
 	}
 	return cli, s.Close
 }
