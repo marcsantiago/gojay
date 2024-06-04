@@ -69,6 +69,10 @@ func (dec *Decoder) ResetForExternalPool() {
 	dec.data = dec.data[:0]
 }
 
+func (dec *Decoder) SetReader(r io.Reader) {
+	dec.r = r
+}
+
 // Release sends back a Decoder to the pool.
 // If a decoder is used after calling Release
 // a panic will be raised with an InvalidUsagePooledDecoderError error.
