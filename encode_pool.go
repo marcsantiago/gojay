@@ -43,6 +43,15 @@ func BorrowEncoder(w io.Writer) *Encoder {
 	return enc
 }
 
+func (enc *Encoder) ResetForExternalPool() {
+	enc.w = nil
+	enc.buf = enc.buf[:0]
+	enc.isPooled = 0
+	enc.err = nil
+	enc.hasKeys = false
+	enc.keys = nil
+}
+
 // Release sends back a Encoder to the pool.
 func (enc *Encoder) Release() {
 	enc.isPooled = 1

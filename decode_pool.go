@@ -40,6 +40,7 @@ func newDecoderPool() interface{} {
 func BorrowDecoder(r io.Reader) *Decoder {
 	return borrowDecoder(r, 512)
 }
+
 func borrowDecoder(r io.Reader, bufSize int) *Decoder {
 	dec := decPool.Get().(*Decoder)
 	dec.called = 0
@@ -55,6 +56,17 @@ func borrowDecoder(r io.Reader, bufSize int) *Decoder {
 		dec.data = make([]byte, bufSize)
 	}
 	return dec
+}
+
+func (dec *Decoder) ResetForExternalPool() {
+	dec.called = 0
+	dec.keysDone = 0
+	dec.cursor = 0
+	dec.err = nil
+	dec.length = 0
+	dec.disableStrictUnicode = false
+	dec.skipArrayDataBlock = false
+	dec.data = dec.data[:0]
 }
 
 // Release sends back a Decoder to the pool.
