@@ -11,9 +11,8 @@ import (
 )
 
 // Basic Behaviour Tests
-//
 func TestDecoderImplementsContext(t *testing.T) {
-	var dec interface{} = &StreamDecoder{}
+	var dec any = &StreamDecoder{}
 	_ = dec.(context.Context)
 }
 
@@ -21,7 +20,7 @@ func TestDecodeStreamNoReader(t *testing.T) {
 	dec := Stream.NewDecoder(nil)
 	dec.done = make(chan struct{}, 1)
 	testChan := ChannelStreamObjects(make(chan *TestObj))
-	go dec.DecodeStream(&testChan)
+	go func() { _ = dec.DecodeStream(&testChan) }()
 
 	select {
 	case <-dec.Done():
@@ -43,7 +42,7 @@ type StreamTestObject struct {
 }
 
 func TestStreamDecodingObjectsParallel(t *testing.T) {
-	var tests = []StreamTestObject{
+	tests := []StreamTestObject{
 		{
 			name: "Stream objects",
 			streamReader: &StreamReader{
@@ -173,7 +172,6 @@ func TestStreamDecodingObjectsParallel(t *testing.T) {
 		},
 	}
 	for _, testCase := range tests {
-		testCase := testCase
 		t.Run(testCase.name, func(t *testing.T) {
 			t.Parallel()
 			runStreamTestCaseObjects(t, testCase)
@@ -186,7 +184,7 @@ func runStreamTestCaseObjects(t *testing.T, testCase StreamTestObject) {
 	testChan := ChannelStreamObjects(make(chan *TestObj))
 	dec := Stream.NewDecoder(testCase.streamReader)
 	// start decoding (will block the goroutine until something is written to the ReadWriter)
-	go dec.DecodeStream(&testChan)
+	go func() { _ = dec.DecodeStream(&testChan) }()
 	// start writing to the ReadWriter
 	go testCase.streamReader.Write()
 	// prepare our result
@@ -222,7 +220,7 @@ type StreamTestString struct {
 }
 
 func TestStreamDecodingStringsParallel(t *testing.T) {
-	var tests = []StreamTestString{
+	tests := []StreamTestString{
 		{
 			name: "Stream strings basic",
 			streamReader: &StreamReader{
@@ -281,7 +279,6 @@ func TestStreamDecodingStringsParallel(t *testing.T) {
 		},
 	}
 	for _, testCase := range tests {
-		testCase := testCase
 		t.Run(testCase.name, func(t *testing.T) {
 			t.Parallel()
 			runStreamTestCaseStrings(t, testCase)
@@ -294,7 +291,7 @@ func runStreamTestCaseStrings(t *testing.T, testCase StreamTestString) {
 	testChan := ChannelStreamStrings(make(chan *string))
 	dec := Stream.NewDecoder(testCase.streamReader)
 	// start decoding (will block the goroutine until something is written to the ReadWriter)
-	go dec.DecodeStream(testChan)
+	go func() { _ = dec.DecodeStream(testChan) }()
 	// start writing to the ReadWriter
 	go testCase.streamReader.Write()
 	// prepare our result
@@ -315,14 +312,13 @@ func TestStreamDecodingErr(t *testing.T) {
 	testChan := ChannelStreamStrings(make(chan *string))
 	dec := Stream.NewDecoder(&StreamReaderErr{})
 	// start decoding (will block the goroutine until something is written to the ReadWriter)
-	go dec.DecodeStream(testChan)
+	go func() { _ = dec.DecodeStream(testChan) }()
 	select {
 	case <-dec.Done():
 		assert.NotNil(t, dec.Err(), "dec.Err() should not be nil")
 	case <-testChan:
 		assert.True(t, false, "should not be called")
 	}
-
 }
 
 type ChannelStreamStrings chan *string
@@ -352,7 +348,7 @@ func (r *StreamReader) Write() {
 	lastWrite := 0
 	for r.writeCounter < t {
 		time.Sleep(time.Duration(r.writeCounter*100) * time.Millisecond)
-		currentChunkStart := (chunkSize) * r.writeCounter
+		currentChunkStart := chunkSize * r.writeCounter
 		lastWrite = currentChunkStart + chunkSize
 		r.readChan <- r.data[currentChunkStart:lastWrite]
 		carry = l - lastWrite

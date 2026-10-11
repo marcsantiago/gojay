@@ -3,7 +3,6 @@ package codegen
 import (
 	"fmt"
 	"go/format"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -16,7 +15,6 @@ const gojayPackage = "github.com/marcsantiago/gojay"
 // Generator holds the content to generate the gojay code
 type Generator struct {
 	fileInfo      *toolbox.FileSetInfo
-	types         map[string]string
 	structTypes   map[string]string
 	sliceTypes    map[string]string
 	pooledObjects map[string]string
@@ -57,7 +55,7 @@ func (g *Generator) init() {
 
 // NewGenerator creates a new generator with the given options
 func NewGenerator(options *Options) *Generator {
-	var g = &Generator{}
+	g := &Generator{}
 	// first we validate the flags
 	if err := options.Validate(); err != nil {
 		panic(err)
@@ -88,7 +86,7 @@ func (g *Generator) Generate() error {
 }
 
 func (g *Generator) writeCode() error {
-	var generatedCode = []string{}
+	generatedCode := []string{}
 
 	for _, key := range sortedKeys(g.pooledObjects) {
 		code := g.pooledObjects[key]
@@ -120,7 +118,6 @@ func (g *Generator) writeCode() error {
 	}
 
 	code, err := format.Source([]byte(expandedCode))
-
 	if err != nil {
 		return err
 	}
@@ -131,7 +128,7 @@ func (g *Generator) writeCode() error {
 		return nil
 	}
 
-	return ioutil.WriteFile(g.options.Dest, code, 0644)
+	return os.WriteFile(g.options.Dest, code, 0o644)
 }
 
 func (g *Generator) generatePrimitiveArray(field *Field) error {
@@ -200,7 +197,6 @@ func (g *Generator) generatePool(structType string) error {
 		}{getPoolName(structType), structType})
 	}
 	return err
-
 }
 
 func (g *Generator) generateStructCode(structType string) error {
@@ -212,11 +208,10 @@ func (g *Generator) generateStructCode(structType string) error {
 	if _, hasCode := g.structTypes[structType]; hasCode {
 		return nil
 	}
-	g.generatePool(structType)
+	_ = g.generatePool(structType)
 
 	aStruct := NewStruct(typeInfo, g)
 	code, err := aStruct.Generate()
-
 	if err != nil {
 		return err
 	}

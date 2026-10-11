@@ -50,7 +50,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks(in *jlexer.Lexer,
 						out.Users = DSUsers{}
 					}
 				} else {
-					out.Users = (out.Users)[:0]
+					out.Users = out.Users[:0]
 				}
 				for !in.IsDelim(']') {
 					var v1 *DSUser
@@ -58,9 +58,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks(in *jlexer.Lexer,
 						in.Skip()
 						v1 = nil
 					} else {
-						if v1 == nil {
-							v1 = new(DSUser)
-						}
+						v1 = new(DSUser)
 						(*v1).UnmarshalEasyJSON(in)
 					}
 					out.Users = append(out.Users, v1)
@@ -88,6 +86,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks(in *jlexer.Lexer,
 		in.Consumed()
 	}
 }
+
 func easyjsonCfe4e5f0EncodeGithubComFrancoispqtGojayBenchmarks(out *jwriter.Writer, in LargePayload) {
 	out.RawByte('{')
 	first := true
@@ -157,6 +156,7 @@ func (v *LargePayload) UnmarshalJSON(data []byte) error {
 func (v *LargePayload) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks(l, v)
 }
+
 func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks1(in *jlexer.Lexer, out *DSUser) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -188,6 +188,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks1(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonCfe4e5f0EncodeGithubComFrancoispqtGojayBenchmarks1(out *jwriter.Writer, in DSUser) {
 	out.RawByte('{')
 	first := true
@@ -228,6 +229,7 @@ func (v *DSUser) UnmarshalJSON(data []byte) error {
 func (v *DSUser) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks1(l, v)
 }
+
 func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks2(in *jlexer.Lexer, out *DSTopicsList) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -260,7 +262,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks2(in *jlexer.Lexer
 						out.Topics = DSTopics{}
 					}
 				} else {
-					out.Topics = (out.Topics)[:0]
+					out.Topics = out.Topics[:0]
 				}
 				for !in.IsDelim(']') {
 					var v4 *DSTopic
@@ -268,9 +270,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks2(in *jlexer.Lexer
 						in.Skip()
 						v4 = nil
 					} else {
-						if v4 == nil {
-							v4 = new(DSTopic)
-						}
+						v4 = new(DSTopic)
 						(*v4).UnmarshalEasyJSON(in)
 					}
 					out.Topics = append(out.Topics, v4)
@@ -279,7 +279,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks2(in *jlexer.Lexer
 				in.Delim(']')
 			}
 		case "MoreTopicsUrl":
-			out.MoreTopicsUrl = string(in.String())
+			out.MoreTopicsURL = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -290,6 +290,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks2(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonCfe4e5f0EncodeGithubComFrancoispqtGojayBenchmarks2(out *jwriter.Writer, in DSTopicsList) {
 	out.RawByte('{')
 	first := true
@@ -327,7 +328,7 @@ func easyjsonCfe4e5f0EncodeGithubComFrancoispqtGojayBenchmarks2(out *jwriter.Wri
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.MoreTopicsUrl))
+		out.String(string(in.MoreTopicsURL))
 	}
 	out.RawByte('}')
 }
@@ -355,6 +356,7 @@ func (v *DSTopicsList) UnmarshalJSON(data []byte) error {
 func (v *DSTopicsList) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks2(l, v)
 }
+
 func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks3(in *jlexer.Lexer, out *DSTopic) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -375,7 +377,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks3(in *jlexer.Lexer
 		}
 		switch key {
 		case "Id":
-			out.Id = int(in.Int())
+			out.ID = int(in.Int())
 		case "Slug":
 			out.Slug = string(in.String())
 		default:
@@ -388,6 +390,7 @@ func easyjsonCfe4e5f0DecodeGithubComFrancoispqtGojayBenchmarks3(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonCfe4e5f0EncodeGithubComFrancoispqtGojayBenchmarks3(out *jwriter.Writer, in DSTopic) {
 	out.RawByte('{')
 	first := true
@@ -400,7 +403,7 @@ func easyjsonCfe4e5f0EncodeGithubComFrancoispqtGojayBenchmarks3(out *jwriter.Wri
 		} else {
 			out.RawString(prefix)
 		}
-		out.Int(int(in.Id))
+		out.Int(int(in.ID))
 	}
 	{
 		const prefix string = ",\"Slug\":"

@@ -260,6 +260,8 @@ func (s *sliceTestObjectWithToken) UnmarshalJSONObject(dec *Decoder, k string) e
 			s.SliceString = []string{strconv.FormatBool(n)}
 		case TokenNull:
 			s.SliceString = []string{}
+		case TokenUnknown:
+			// do nothing
 		}
 	}
 	return nil

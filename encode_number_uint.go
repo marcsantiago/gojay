@@ -7,7 +7,7 @@ func (enc *Encoder) EncodeUint64(n uint64) error {
 	if enc.isPooled == 1 {
 		panic(InvalidUsagePooledEncoderError("Invalid usage of pooled encoder"))
 	}
-	_, _ = enc.encodeUint64(n)
+	_ = enc.encodeUint64(n)
 	_, err := enc.Write()
 	if err != nil {
 		return err
@@ -16,9 +16,9 @@ func (enc *Encoder) EncodeUint64(n uint64) error {
 }
 
 // encodeUint64 encodes an int to JSON
-func (enc *Encoder) encodeUint64(n uint64) ([]byte, error) {
+func (enc *Encoder) encodeUint64(n uint64) []byte {
 	enc.buf = strconv.AppendUint(enc.buf, n, 10)
-	return enc.buf, nil
+	return enc.buf
 }
 
 // AddUint64 adds an int to be encoded, must be used inside a slice or array encoding (does not encode a key)

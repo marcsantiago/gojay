@@ -98,22 +98,23 @@ var MediumFixture = []byte(`{
   }`)
 
 type CBAvatar struct {
-	Url string
+	URL string
 }
 
 func (m *CBAvatar) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
 	switch key {
 	case "avatars":
-		return dec.AddString(&m.Url)
+		return dec.AddString(&m.URL)
 	}
 	return nil
 }
+
 func (m *CBAvatar) NKeys() int {
 	return 1
 }
 
 func (m *CBAvatar) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.AddStringKey("url", m.Url)
+	enc.AddStringKey("url", m.URL)
 }
 
 func (m *CBAvatar) IsNil() bool {
@@ -122,19 +123,20 @@ func (m *CBAvatar) IsNil() bool {
 
 type Avatars []*CBAvatar
 
-func (t *Avatars) UnmarshalJSONArray(dec *gojay.Decoder) error {
+func (a *Avatars) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	avatar := CBAvatar{}
-	*t = append(*t, &avatar)
+	*a = append(*a, &avatar)
 	return dec.AddObject(&avatar)
 }
 
-func (m *Avatars) MarshalJSONArray(enc *gojay.Encoder) {
-	for _, e := range *m {
+func (a *Avatars) MarshalJSONArray(enc *gojay.Encoder) {
+	for _, e := range *a {
 		enc.AddObject(e)
 	}
 }
-func (m *Avatars) IsNil() bool {
-	return m == nil
+
+func (a *Avatars) IsNil() bool {
+	return a == nil
 }
 
 type CBGravatar struct {
@@ -148,6 +150,7 @@ func (m *CBGravatar) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
 	}
 	return nil
 }
+
 func (m *CBGravatar) NKeys() int {
 	return 1
 }
@@ -255,7 +258,7 @@ func (m *MediumPayload) UnmarshalJSONObject(dec *gojay.Decoder, key string) erro
 		m.Person = &CBPerson{}
 		return dec.AddObject(m.Person)
 	case "company":
-		dec.AddString(&m.Company)
+		return dec.AddString(&m.Company)
 	}
 	return nil
 }
@@ -286,28 +289,28 @@ func NewMediumPayload() *MediumPayload {
 			Gravatar: &CBGravatar{
 				Avatars: Avatars{
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 					&CBAvatar{
-						Url: "http://test.com",
+						URL: "http://test.com",
 					},
 				},
 			},

@@ -1,0 +1,32 @@
+version: "2"
+
+linters:
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - bidichk
+    - bodyclose
+    - errname
+    - exhaustive
+    - exptostd
+    - modernize
+    - nilerr
+    - nilnesserr
+    - predeclared
+    - rowserrcheck
+    - sloglint
+    - sqlclosecheck
+    - unconvert
+    - unparam
+    - wastedassign
+
+issues:
+  max-same-issues: 0
+
+run:
+  timeout: 5m
+  concurrency: 4
+

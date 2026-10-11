@@ -12,15 +12,15 @@ import (
 
 func BenchmarkJsonParserDecodeObjLarge(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		jsonparser.ArrayEach(benchmarks.LargeFixture, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
-			jsonparser.Get(value, "username")
+	for b.Loop() {
+		_, _ = jsonparser.ArrayEach(benchmarks.LargeFixture, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+			_, _, _, _ = jsonparser.Get(value, "username")
 			nothing()
 		}, "users")
 
-		jsonparser.ArrayEach(benchmarks.LargeFixture, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
-			jsonparser.GetInt(value, "id")
-			jsonparser.Get(value, "slug")
+		_, _ = jsonparser.ArrayEach(benchmarks.LargeFixture, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+			_, _ = jsonparser.GetInt(value, "id")
+			_, _, _, _ = jsonparser.Get(value, "slug")
 			nothing()
 		}, "topics", "topics")
 	}
@@ -28,32 +28,32 @@ func BenchmarkJsonParserDecodeObjLarge(b *testing.B) {
 
 func BenchmarkJsonIterDecodeObjLarge(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		result := benchmarks.LargePayload{}
-		jsoniter.Unmarshal(benchmarks.LargeFixture, &result)
+		_ = jsoniter.Unmarshal(benchmarks.LargeFixture, &result)
 	}
 }
 
 func BenchmarkEasyJsonDecodeObjLarge(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		result := benchmarks.LargePayload{}
-		easyjson.Unmarshal(benchmarks.LargeFixture, &result)
+		_ = easyjson.Unmarshal(benchmarks.LargeFixture, &result)
 	}
 }
 
 func BenchmarkGoJayDecodeObjLarge(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		result := benchmarks.LargePayload{}
-		gojay.UnmarshalJSONObject(benchmarks.LargeFixture, &result)
+		_ = gojay.UnmarshalJSONObject(benchmarks.LargeFixture, &result)
 	}
 }
 
 func BenchmarkGoJayUnsafeDecodeObjLarge(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		result := benchmarks.LargePayload{}
-		gojay.Unsafe.UnmarshalJSONObject(benchmarks.LargeFixture, &result)
+		_ = gojay.Unsafe.UnmarshalJSONObject(benchmarks.LargeFixture, &result)
 	}
 }

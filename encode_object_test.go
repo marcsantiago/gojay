@@ -27,7 +27,7 @@ type TestEncoding struct {
 	testBool      bool
 	testF32       float32
 	testF64       float64
-	testInterface interface{}
+	testInterface any
 	testArr       TestEncodingArr
 	sub           *SubObject
 }
@@ -69,7 +69,7 @@ func (t *SubObject) MarshalJSONObject(enc *Encoder) {
 }
 
 type testEncodingObjInterfaces struct {
-	interfaceVal interface{}
+	interfaceVal any
 }
 
 func (t *testEncodingObjInterfaces) IsNil() bool {
@@ -87,7 +87,9 @@ func TestEncoderObjectEncodeAPI(t *testing.T) {
 		err := enc.EncodeObject(&testObject{
 			"漢字", nil, 1, nil, 1, nil, 1, nil, 1, nil, 1, nil, 1, nil, 1, nil,
 			1, nil, 1, nil, 1.1, nil, 1.1, nil, true, nil,
-			&testObject{}, testSliceInts{}, interface{}("test"),
+			&testObject{},
+			testSliceInts{},
+			any("test"),
 		})
 		assert.Nil(t, err, "Error should be nil")
 		assert.Equal(
@@ -104,7 +106,9 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 		r, err := Marshal(&testObject{
 			"漢字", nil, 1, nil, 1, nil, 1, nil, 1, nil, 1, nil, 1, nil, 1,
 			nil, 1, nil, 1, nil, 1.1, nil, 1.1, nil, true, nil,
-			&testObject{}, testSliceInts{}, []interface{}{"h", "o", "l", "a"},
+			&testObject{},
+			testSliceInts{},
+			[]any{"h", "o", "l", "a"},
 		})
 		assert.Nil(t, err, "Error should be nil")
 		assert.Equal(
@@ -159,7 +163,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":"string"}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-int", func(t *testing.T) {
 		v := testEncodingObjInterfaces{1}
@@ -169,7 +174,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-int64", func(t *testing.T) {
 		v := testEncodingObjInterfaces{int64(1)}
@@ -179,7 +185,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-int32", func(t *testing.T) {
 		v := testEncodingObjInterfaces{int32(1)}
@@ -189,7 +196,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-int16", func(t *testing.T) {
 		v := testEncodingObjInterfaces{int16(1)}
@@ -199,7 +207,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-int8", func(t *testing.T) {
 		v := testEncodingObjInterfaces{int8(1)}
@@ -209,7 +218,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-uint64", func(t *testing.T) {
 		v := testEncodingObjInterfaces{uint64(1)}
@@ -219,7 +229,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-uint32", func(t *testing.T) {
 		v := testEncodingObjInterfaces{uint32(1)}
@@ -229,7 +240,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-uint16", func(t *testing.T) {
 		v := testEncodingObjInterfaces{uint16(1)}
@@ -239,7 +251,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-uint8", func(t *testing.T) {
 		v := testEncodingObjInterfaces{uint8(1)}
@@ -249,7 +262,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-float64", func(t *testing.T) {
 		v := testEncodingObjInterfaces{float64(1.1)}
@@ -259,7 +273,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1.1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-interface-float32", func(t *testing.T) {
 		v := testEncodingObjInterfaces{float32(1.1)}
@@ -269,7 +284,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"interfaceVal":1.1}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-object-func", func(t *testing.T) {
 		f := EncodeObjectFunc(func(enc *Encoder) {
@@ -281,7 +297,8 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"test":"test"}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("marshal-any-object", func(t *testing.T) {
 		test := struct {
@@ -297,26 +314,27 @@ func TestEncoderObjectMarshalAPI(t *testing.T) {
 			t,
 			`{"Foo":"test","Bar":100}`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 }
 
-type TestObectOmitEmpty struct {
-	nonNiler           int
-	testInt            int
-	testFloat          float64
-	testFloat32        float32
-	testString         string
-	testBool           bool
-	testObectOmitEmpty *TestObectOmitEmpty
-	testObect          *TestObectOmitEmpty
+type TestObjectOmitEmpty struct {
+	nonNiler            int
+	testInt             int
+	testFloat           float64
+	testFloat32         float32
+	testString          string
+	testBool            bool
+	testObjectOmitEmpty *TestObjectOmitEmpty
+	testObject          *TestObjectOmitEmpty
 }
 
-func (t *TestObectOmitEmpty) IsNil() bool {
+func (t *TestObjectOmitEmpty) IsNil() bool {
 	return t == nil
 }
 
-func (t *TestObectOmitEmpty) MarshalJSONObject(enc *Encoder) {
+func (t *TestObjectOmitEmpty) MarshalJSONObject(enc *Encoder) {
 	enc.AddIntKeyOmitEmpty("testInt", t.testInt)
 	enc.AddIntKeyOmitEmpty("testIntNotEmpty", 1)
 	enc.AddFloatKeyOmitEmpty("testFloat", t.testFloat)
@@ -327,19 +345,19 @@ func (t *TestObectOmitEmpty) MarshalJSONObject(enc *Encoder) {
 	enc.AddStringKeyOmitEmpty("testStringNotEmpty", "foo")
 	enc.AddBoolKeyOmitEmpty("testBool", t.testBool)
 	enc.AddBoolKeyOmitEmpty("testBoolNotEmpty", true)
-	enc.AddObjectKeyOmitEmpty("testObect", t.testObect)
-	enc.AddObjectKeyOmitEmpty("testObectOmitEmpty", t.testObectOmitEmpty)
+	enc.AddObjectKeyOmitEmpty("testObject", t.testObject)
+	enc.AddObjectKeyOmitEmpty("testObjectOmitEmpty", t.testObjectOmitEmpty)
 	enc.AddArrayKeyOmitEmpty("testArrayOmitEmpty", TestEncodingArrStrings{})
 	enc.AddArrayKeyOmitEmpty("testArray", TestEncodingArrStrings{"foo"})
 }
 
-type TestObectOmitEmptyInterface struct{}
+type TestObjectOmitEmptyInterface struct{}
 
-func (t *TestObectOmitEmptyInterface) IsNil() bool {
+func (t *TestObjectOmitEmptyInterface) IsNil() bool {
 	return t == nil
 }
 
-func (t *TestObectOmitEmptyInterface) MarshalJSONObject(enc *Encoder) {
+func (t *TestObjectOmitEmptyInterface) MarshalJSONObject(enc *Encoder) {
 	enc.AddInterfaceKeyOmitEmpty("testInt", 0)
 	enc.AddInterfaceKeyOmitEmpty("testInt64", int64(0))
 	enc.AddInterfaceKeyOmitEmpty("testInt32", int32(0))
@@ -358,35 +376,35 @@ func (t *TestObectOmitEmptyInterface) MarshalJSONObject(enc *Encoder) {
 	enc.AddInterfaceKeyOmitEmpty("testStringNotEmpty", "foo")
 	enc.AddInterfaceKeyOmitEmpty("testBool", false)
 	enc.AddInterfaceKeyOmitEmpty("testBoolNotEmpty", true)
-	enc.AddInterfaceKeyOmitEmpty("testObectOmitEmpty", nil)
-	enc.AddInterfaceKeyOmitEmpty("testObect", &TestEncoding{})
+	enc.AddInterfaceKeyOmitEmpty("testObjectOmitEmpty", nil)
+	enc.AddInterfaceKeyOmitEmpty("testObject", &TestEncoding{})
 	enc.AddInterfaceKeyOmitEmpty("testArr", &TestEncodingArrStrings{})
 }
 
 func TestEncoderObjectOmitEmpty(t *testing.T) {
 	t.Run("encoder-omit-empty-all-types", func(t *testing.T) {
-		v := &TestObectOmitEmpty{
-			nonNiler:  1,
-			testInt:   0,
-			testObect: &TestObectOmitEmpty{testInt: 1},
+		v := &TestObjectOmitEmpty{
+			nonNiler:   1,
+			testInt:    0,
+			testObject: &TestObjectOmitEmpty{testInt: 1},
 		}
 		r, err := MarshalJSONObject(v)
 		assert.Nil(t, err, "Error should be nil")
 		assert.Equal(
 			t,
-			`{"testIntNotEmpty":1,"testFloatNotEmpty":1.1,"testFloat32NotEmpty":1.1,"testStringNotEmpty":"foo","testBoolNotEmpty":true,"testObect":{"testInt":1,"testIntNotEmpty":1,"testFloatNotEmpty":1.1,"testFloat32NotEmpty":1.1,"testStringNotEmpty":"foo","testBoolNotEmpty":true,"testArray":["foo"]},"testArray":["foo"]}`,
+			`{"testIntNotEmpty":1,"testFloatNotEmpty":1.1,"testFloat32NotEmpty":1.1,"testStringNotEmpty":"foo","testBoolNotEmpty":true,"testObject":{"testInt":1,"testIntNotEmpty":1,"testFloatNotEmpty":1.1,"testFloat32NotEmpty":1.1,"testStringNotEmpty":"foo","testBoolNotEmpty":true,"testArray":["foo"]},"testArray":["foo"]}`,
 			string(r),
 			"Result of marshalling is different as the one expected",
 		)
 	})
 
 	t.Run("encoder-omit-empty-interface", func(t *testing.T) {
-		v := &TestObectOmitEmptyInterface{}
+		v := &TestObjectOmitEmptyInterface{}
 		r, err := MarshalJSONObject(v)
 		assert.Nil(t, err, "Error should be nil")
 		assert.Equal(
 			t,
-			`{"testIntNotEmpty":1,"testFloatNotEmpty":1.1,"testFloat32NotEmpty":1.1,"testStringNotEmpty":"foo","testBoolNotEmpty":true,"testObect":{"test":"","test2":"","testInt":0,"testBool":false,"testArr":[],"testF64":0,"testF32":0,"sub":{}}}`,
+			`{"testIntNotEmpty":1,"testFloatNotEmpty":1.1,"testFloat32NotEmpty":1.1,"testStringNotEmpty":"foo","testBoolNotEmpty":true,"testObject":{"test":"","test2":"","testInt":0,"testBool":false,"testArr":[],"testF64":0,"testF32":0,"sub":{}}}`,
 			string(r),
 			"Result of marshalling is different as the one expected",
 		)
@@ -430,7 +448,7 @@ func TestEncoderObjectEncodeAPIError(t *testing.T) {
 }
 
 func TestEncoderObjectKeyNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -449,18 +467,18 @@ func TestEncoderObjectKeyNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.AddObjectKeyNullEmpty("foo", (*TestEncoding)(nil))
 			enc.ObjectKeyNullEmpty("bar", &TestEncoding{})
-			enc.Write()
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderObjectNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -479,11 +497,11 @@ func TestEncoderObjectNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.AddObjectNullEmpty((*TestEncoding)(nil))
 			enc.ObjectNullEmpty(&TestEncoding{})
-			enc.Write()
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
@@ -575,9 +593,9 @@ func TestEncodeObjectWithKeys(t *testing.T) {
 		"should not encode any key",
 		func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
-			var o = &ObjectWithKeys{}
-			var err = enc.EncodeObjectKeys(o, []string{})
+			enc := NewEncoder(&b)
+			o := &ObjectWithKeys{}
+			err := enc.EncodeObjectKeys(o, []string{})
 			assert.Nil(t, err)
 			assert.Equal(t, `{}`, b.String())
 		},
@@ -586,9 +604,9 @@ func TestEncodeObjectWithKeys(t *testing.T) {
 		"should encode some keys",
 		func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
-			var o = &ObjectWithKeys{Str: "hello", Int: 420}
-			var err = enc.EncodeObjectKeys(o, []string{"string", "int"})
+			enc := NewEncoder(&b)
+			o := &ObjectWithKeys{Str: "hello", Int: 420}
+			err := enc.EncodeObjectKeys(o, []string{"string", "int"})
 			assert.Nil(t, err)
 			assert.Equal(
 				t,

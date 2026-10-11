@@ -15,8 +15,8 @@ func TestDecodeStreamDecodePooledDecoderError(t *testing.T) {
 		assert.NotNil(t, err, "err shouldnt be nil")
 		assert.IsType(t, InvalidUsagePooledDecoderError(""), err, "err should be of type InvalidUsagePooledDecoderError")
 	}()
-	var v = 0
-	dec.Decode(&v)
+	v := 0
+	_ = dec.Decode(&v)
 	// make sure it fails if this is called
 	assert.True(t, false, "should not be called as decoder should have panicked")
 }
@@ -30,8 +30,8 @@ func TestDecodeStreamDecodePooledDecoderError1(t *testing.T) {
 		assert.NotNil(t, err, "err shouldnt be nil")
 		assert.IsType(t, InvalidUsagePooledDecoderError(""), err, "err should be of type InvalidUsagePooledDecoderError")
 	}()
-	var v = testSliceStrings{}
-	dec.DecodeArray(&v)
+	v := testSliceStrings{}
+	_ = dec.DecodeArray(&v)
 	// make sure they are the same
 	assert.True(t, false, "should not be called as decoder should have panicked")
 }
@@ -46,8 +46,8 @@ func TestDecodeStreamDecodePooledDecoderError2(t *testing.T) {
 		assert.IsType(t, InvalidUsagePooledDecoderError(""), err, "err should be of type InvalidUsagePooledDecoderError")
 		assert.Equal(t, "Invalid usage of pooled decoder", err.(InvalidUsagePooledDecoderError).Error(), "err should be of type InvalidUsagePooledDecoderError")
 	}()
-	var v = TestObj{}
-	dec.DecodeObject(&v)
+	v := TestObj{}
+	_ = dec.DecodeObject(&v)
 	// make sure they are the same
 	assert.True(t, false, "should not be called as decoder should have panicked")
 }

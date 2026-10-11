@@ -94,7 +94,7 @@ func TestAddTimeKey(t *testing.T) {
 			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.AddTimeKey("test", &tt, testCase.format)
-			enc.Write()
+			_, _ = enc.Write()
 			if !testCase.err {
 				assert.Nil(t, err)
 				assert.Equal(t, testCase.expectedJSON, b.String())
@@ -146,7 +146,7 @@ func TestAddTime(t *testing.T) {
 			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.AddTime(&tt, testCase.format)
-			enc.Write()
+			_, _ = enc.Write()
 			if !testCase.err {
 				assert.Nil(t, err)
 				assert.Equal(t, testCase.expectedJSON, b.String())

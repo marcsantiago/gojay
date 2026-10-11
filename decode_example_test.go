@@ -59,7 +59,7 @@ func ExampleDecodeObjectFunc() {
 		name  string
 		email string
 	}{}
-	dec.DecodeObject(gojay.DecodeObjectFunc(func(dec *gojay.Decoder, k string) error {
+	_ = dec.DecodeObject(gojay.DecodeObjectFunc(func(dec *gojay.Decoder, k string) error {
 		switch k {
 		case "name":
 			return dec.String(&user.name)
@@ -93,7 +93,6 @@ func ExampleDecodeArrayFunc() {
 		strSlice = append(strSlice, str)
 		return nil
 	}))
-
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -17,7 +17,7 @@ func TestDecoderFloat64(t *testing.T) {
 		expectedResult float64
 		skipResult     bool
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-float",
@@ -340,7 +340,7 @@ func TestDecoderFloat64Null(t *testing.T) {
 		expectedResult float64
 		resultIsNil    bool
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-float",
@@ -608,7 +608,7 @@ func TestDecoderFloat64Null(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			json := []byte(testCase.json)
-			var v = (*float64)(nil)
+			v := (*float64)(nil)
 			err := Unmarshal(json, &v)
 			if testCase.err {
 				assert.NotNil(t, err, "Err must not be nil")
@@ -631,21 +631,21 @@ func TestDecoderFloat64Null(t *testing.T) {
 		})
 	}
 	t.Run("decoder-api-invalid-json", func(t *testing.T) {
-		var v = new(float64)
+		v := new(float64)
 		err := Unmarshal([]byte(``), &v)
 		assert.NotNil(t, err, "Err must not be nil")
 		assert.IsType(t, InvalidJSONError(""), err, "err should be of type InvalidJSONError")
 	})
 	t.Run("decoder-api-invalid-json2", func(t *testing.T) {
-		var v = new(float64)
-		var dec = NewDecoder(strings.NewReader(``))
+		v := new(float64)
+		dec := NewDecoder(strings.NewReader(``))
 		err := dec.FloatNull(&v)
 		assert.NotNil(t, err, "Err must not be nil")
 		assert.IsType(t, InvalidJSONError(""), err, "err should be of type InvalidJSONError")
 	})
 	t.Run("decoder-api-invalid-json2", func(t *testing.T) {
-		var v = new(float64)
-		var dec = NewDecoder(strings.NewReader(``))
+		v := new(float64)
+		dec := NewDecoder(strings.NewReader(``))
 		err := dec.AddFloat64Null(&v)
 		assert.NotNil(t, err, "Err must not be nil")
 		assert.IsType(t, InvalidJSONError(""), err, "err should be of type InvalidJSONError")
@@ -659,7 +659,7 @@ func TestDecoderFloat32(t *testing.T) {
 		expectedResult float32
 		skipResult     bool
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-float",
@@ -978,7 +978,7 @@ func TestDecoderFloat32Null(t *testing.T) {
 		expectedResult float32
 		resultIsNil    bool
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-float",
@@ -1244,7 +1244,7 @@ func TestDecoderFloat32Null(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			json := []byte(testCase.json)
-			var v = (*float32)(nil)
+			v := (*float32)(nil)
 			err := Unmarshal(json, &v)
 			if testCase.err {
 				assert.NotNil(t, err, "Err must not be nil")
@@ -1271,14 +1271,14 @@ func TestDecoderFloat32Null(t *testing.T) {
 		})
 	}
 	t.Run("decoder-api-invalid-json", func(t *testing.T) {
-		var v = new(float32)
+		v := new(float32)
 		err := Unmarshal([]byte(``), &v)
 		assert.NotNil(t, err, "Err must not be nil")
 		assert.IsType(t, InvalidJSONError(""), err, "err should be of type InvalidJSONError")
 	})
 	t.Run("decoder-api-invalid-json2", func(t *testing.T) {
-		var v = new(float32)
-		var dec = NewDecoder(strings.NewReader(``))
+		v := new(float32)
+		dec := NewDecoder(strings.NewReader(``))
 		err := dec.Float32Null(&v)
 		assert.NotNil(t, err, "Err must not be nil")
 		assert.IsType(t, InvalidJSONError(""), err, "err should be of type InvalidJSONError")
@@ -1286,7 +1286,7 @@ func TestDecoderFloat32Null(t *testing.T) {
 }
 
 func TestDecoderFloat64Field(t *testing.T) {
-	var testCasesBasic = []struct {
+	testCasesBasic := []struct {
 		name  string
 		json  string
 		value float64
@@ -1304,15 +1304,15 @@ func TestDecoderFloat64Field(t *testing.T) {
 	}
 	for _, testCase := range testCasesBasic {
 		t.Run(testCase.name, func(t *testing.T) {
-			var dec = NewDecoder(strings.NewReader(testCase.json))
+			dec := NewDecoder(strings.NewReader(testCase.json))
 			var v float64
-			dec.DecodeArray(DecodeArrayFunc(func(dec *Decoder) error {
+			_ = dec.DecodeArray(DecodeArrayFunc(func(dec *Decoder) error {
 				return dec.AddFloat64(&v)
 			}))
 			assert.Equal(t, testCase.value, v)
 		})
 	}
-	var testCasesBasicAlt = []struct {
+	testCasesBasicAlt := []struct {
 		name  string
 		json  string
 		value float64
@@ -1330,9 +1330,9 @@ func TestDecoderFloat64Field(t *testing.T) {
 	}
 	for _, testCase := range testCasesBasicAlt {
 		t.Run(testCase.name, func(t *testing.T) {
-			var dec = NewDecoder(strings.NewReader(testCase.json))
+			dec := NewDecoder(strings.NewReader(testCase.json))
 			var v float64
-			dec.DecodeArray(DecodeArrayFunc(func(dec *Decoder) error {
+			_ = dec.DecodeArray(DecodeArrayFunc(func(dec *Decoder) error {
 				return dec.Float(&v)
 			}))
 			assert.Equal(t, testCase.value, v)

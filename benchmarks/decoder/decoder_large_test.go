@@ -18,6 +18,6 @@ func TestGoJayDecodeObjLarge(t *testing.T) {
 	}
 	assert.Len(t, result.Topics.Topics, 30, "Len of topics should be 30")
 	for _, top := range result.Topics.Topics {
-		assert.True(t, top.Id > 0, "Topic should have Id")
+		assert.True(t, top.ID > 0, "Topic should have Id")
 	}
 }

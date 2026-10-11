@@ -14,56 +14,55 @@ import (
 
 func BenchmarkJSONDecodeObjSmall(b *testing.B) {
 	b.ReportAllocs()
-	for n := 0; n < b.N; n++ {
+	for b.Loop() {
 		result := benchmarks.SmallPayload{}
-		json.Unmarshal(benchmarks.SmallFixture, &result)
+		_ = json.Unmarshal(benchmarks.SmallFixture, &result)
 	}
 }
 
-func nothing(_ ...interface{}) {}
+func nothing(_ ...any) {}
 func BenchmarkJSONParserSmall(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		jsonparser.GetInt(benchmarks.SmallFixture, "tz")
-		jsonparser.GetInt(benchmarks.SmallFixture, "v")
-		jsonparser.GetInt(benchmarks.SmallFixture, "sid")
-		jsonparser.GetInt(benchmarks.SmallFixture, "st")
-		jsonparser.GetInt(benchmarks.SmallFixture, "gr")
-		jsonparser.Get(benchmarks.SmallFixture, "uuid")
-		jsonparser.Get(benchmarks.SmallFixture, "ua")
-
+	for b.Loop() {
+		_, _ = jsonparser.GetInt(benchmarks.SmallFixture, "tz")
+		_, _ = jsonparser.GetInt(benchmarks.SmallFixture, "v")
+		_, _ = jsonparser.GetInt(benchmarks.SmallFixture, "sid")
+		_, _ = jsonparser.GetInt(benchmarks.SmallFixture, "st")
+		_, _ = jsonparser.GetInt(benchmarks.SmallFixture, "gr")
+		_, _, _, _ = jsonparser.Get(benchmarks.SmallFixture, "uuid")
+		_, _, _, _ = jsonparser.Get(benchmarks.SmallFixture, "ua")
 		nothing()
 	}
 }
 
 func BenchmarkJsonIterDecodeObjSmall(b *testing.B) {
 	b.ReportAllocs()
-	for n := 0; n < b.N; n++ {
+	for b.Loop() {
 		result := benchmarks.SmallPayload{}
-		jsoniter.Unmarshal(benchmarks.SmallFixture, &result)
+		_ = jsoniter.Unmarshal(benchmarks.SmallFixture, &result)
 	}
 }
 
 func BenchmarkEasyJsonDecodeObjSmall(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		result := benchmarks.SmallPayload{}
-		easyjson.Unmarshal(benchmarks.SmallFixture, &result)
+		_ = easyjson.Unmarshal(benchmarks.SmallFixture, &result)
 	}
 }
 
 func BenchmarkGoJayDecodeObjSmall(b *testing.B) {
 	b.ReportAllocs()
-	for n := 0; n < b.N; n++ {
+	for b.Loop() {
 		result := benchmarks.SmallPayload{}
-		gojay.UnmarshalJSONObject(benchmarks.SmallFixture, &result)
+		_ = gojay.UnmarshalJSONObject(benchmarks.SmallFixture, &result)
 	}
 }
 
 func BenchmarkGoJayUnsafeDecodeObjSmall(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		result := benchmarks.SmallPayload{}
-		gojay.Unsafe.UnmarshalJSONObject(benchmarks.SmallFixture, &result)
+		_ = gojay.Unsafe.UnmarshalJSONObject(benchmarks.SmallFixture, &result)
 	}
 }

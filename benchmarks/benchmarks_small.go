@@ -10,8 +10,8 @@ type SmallPayload struct {
 	Sid  int
 	Tt   string
 	Gr   int
-	Uuid string
-	Ip   string
+	UUID string
+	IP   string
 	Ua   string
 	Tz   int
 	V    int
@@ -22,8 +22,8 @@ func (t *SmallPayload) MarshalJSONObject(enc *gojay.Encoder) {
 	enc.AddIntKey("sid", t.Sid)
 	enc.AddStringKey("tt", t.Tt)
 	enc.AddIntKey("gr", t.Gr)
-	enc.AddStringKey("uuid", t.Uuid)
-	enc.AddStringKey("ip", t.Ip)
+	enc.AddStringKey("uuid", t.UUID)
+	enc.AddStringKey("ip", t.IP)
 	enc.AddStringKey("ua", t.Ua)
 	enc.AddIntKey("tz", t.Tz)
 	enc.AddIntKey("v", t.V)
@@ -48,9 +48,9 @@ func (t *SmallPayload) UnmarshalJSONObject(dec *gojay.Decoder, key string) error
 	case "tt":
 		return dec.AddString(&t.Tt)
 	case "uuid":
-		return dec.AddString(&t.Uuid)
+		return dec.AddString(&t.UUID)
 	case "ip":
-		return dec.AddString(&t.Ip)
+		return dec.AddString(&t.IP)
 	case "ua":
 		return dec.AddString(&t.Ua)
 	}
@@ -67,8 +67,8 @@ func NewSmallPayload() *SmallPayload {
 		Sid:  2,
 		Tt:   "TestString",
 		Gr:   4,
-		Uuid: "8f9a65eb-4807-4d57-b6e0-bda5d62f1429",
-		Ip:   "127.0.0.1",
+		UUID: "8f9a65eb-4807-4d57-b6e0-bda5d62f1429",
+		IP:   "127.0.0.1",
 		Ua:   "Mozilla",
 		Tz:   8,
 		V:    6,

@@ -59,6 +59,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks(in *jlexer.Lexer,
 		in.Consumed()
 	}
 }
+
 func easyjsonB0500db0EncodeGithubComFrancoispqtGojayBenchmarks(out *jwriter.Writer, in MediumPayload) {
 	out.RawByte('{')
 	first := true
@@ -113,6 +114,7 @@ func (v *MediumPayload) UnmarshalJSON(data []byte) error {
 func (v *MediumPayload) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks(l, v)
 }
+
 func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks1(in *jlexer.Lexer, out *CBPerson) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -172,6 +174,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks1(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonB0500db0EncodeGithubComFrancoispqtGojayBenchmarks1(out *jwriter.Writer, in CBPerson) {
 	out.RawByte('{')
 	first := true
@@ -244,6 +247,7 @@ func (v *CBPerson) UnmarshalJSON(data []byte) error {
 func (v *CBPerson) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks1(l, v)
 }
+
 func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks2(in *jlexer.Lexer, out *CBName) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -275,6 +279,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks2(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonB0500db0EncodeGithubComFrancoispqtGojayBenchmarks2(out *jwriter.Writer, in CBName) {
 	out.RawByte('{')
 	first := true
@@ -315,6 +320,7 @@ func (v *CBName) UnmarshalJSON(data []byte) error {
 func (v *CBName) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks2(l, v)
 }
+
 func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks3(in *jlexer.Lexer, out *CBGravatar) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -347,7 +353,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks3(in *jlexer.Lexer
 						out.Avatars = Avatars{}
 					}
 				} else {
-					out.Avatars = (out.Avatars)[:0]
+					out.Avatars = out.Avatars[:0]
 				}
 				for !in.IsDelim(']') {
 					var v1 *CBAvatar
@@ -355,9 +361,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks3(in *jlexer.Lexer
 						in.Skip()
 						v1 = nil
 					} else {
-						if v1 == nil {
-							v1 = new(CBAvatar)
-						}
+						v1 = new(CBAvatar)
 						(*v1).UnmarshalEasyJSON(in)
 					}
 					out.Avatars = append(out.Avatars, v1)
@@ -375,6 +379,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks3(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonB0500db0EncodeGithubComFrancoispqtGojayBenchmarks3(out *jwriter.Writer, in CBGravatar) {
 	out.RawByte('{')
 	first := true
@@ -430,6 +435,7 @@ func (v *CBGravatar) UnmarshalJSON(data []byte) error {
 func (v *CBGravatar) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks3(l, v)
 }
+
 func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks4(in *jlexer.Lexer, out *CBGithub) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -461,6 +467,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks4(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonB0500db0EncodeGithubComFrancoispqtGojayBenchmarks4(out *jwriter.Writer, in CBGithub) {
 	out.RawByte('{')
 	first := true
@@ -501,6 +508,7 @@ func (v *CBGithub) UnmarshalJSON(data []byte) error {
 func (v *CBGithub) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks4(l, v)
 }
+
 func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks5(in *jlexer.Lexer, out *CBAvatar) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -521,7 +529,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks5(in *jlexer.Lexer
 		}
 		switch key {
 		case "Url":
-			out.Url = string(in.String())
+			out.URL = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -532,6 +540,7 @@ func easyjsonB0500db0DecodeGithubComFrancoispqtGojayBenchmarks5(in *jlexer.Lexer
 		in.Consumed()
 	}
 }
+
 func easyjsonB0500db0EncodeGithubComFrancoispqtGojayBenchmarks5(out *jwriter.Writer, in CBAvatar) {
 	out.RawByte('{')
 	first := true
@@ -544,7 +553,7 @@ func easyjsonB0500db0EncodeGithubComFrancoispqtGojayBenchmarks5(out *jwriter.Wri
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.Url))
+		out.String(string(in.URL))
 	}
 	out.RawByte('}')
 }

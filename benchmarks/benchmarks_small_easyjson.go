@@ -4,6 +4,7 @@ package benchmarks
 
 import (
 	json "encoding/json"
+
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"
 	jwriter "github.com/mailru/easyjson/jwriter"
@@ -45,9 +46,9 @@ func easyjson890029d8DecodeGithubComFrancoispqtGojayBenchmarks(in *jlexer.Lexer,
 		case "Gr":
 			out.Gr = int(in.Int())
 		case "Uuid":
-			out.Uuid = string(in.String())
+			out.UUID = string(in.String())
 		case "Ip":
-			out.Ip = string(in.String())
+			out.IP = string(in.String())
 		case "Ua":
 			out.Ua = string(in.String())
 		case "Tz":
@@ -64,6 +65,7 @@ func easyjson890029d8DecodeGithubComFrancoispqtGojayBenchmarks(in *jlexer.Lexer,
 		in.Consumed()
 	}
 }
+
 func easyjson890029d8EncodeGithubComFrancoispqtGojayBenchmarks(out *jwriter.Writer, in SmallPayload) {
 	out.RawByte('{')
 	first := true
@@ -116,7 +118,7 @@ func easyjson890029d8EncodeGithubComFrancoispqtGojayBenchmarks(out *jwriter.Writ
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.Uuid))
+		out.String(string(in.UUID))
 	}
 	{
 		const prefix string = ",\"Ip\":"
@@ -126,7 +128,7 @@ func easyjson890029d8EncodeGithubComFrancoispqtGojayBenchmarks(out *jwriter.Writ
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.Ip))
+		out.String(string(in.IP))
 	}
 	{
 		const prefix string = ",\"Ua\":"

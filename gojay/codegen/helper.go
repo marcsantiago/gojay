@@ -1,22 +1,24 @@
 package codegen
 
 import (
-	"github.com/viant/toolbox"
 	"reflect"
-	"strings"
+	"slices"
 	"sort"
+	"strings"
+
+	"github.com/viant/toolbox"
 )
 
 func firstLetterToUppercase(text string) string {
-	return strings.ToUpper(string(text[0:1])) + string(text[1:])
+	return strings.ToUpper(text[0:1]) + text[1:]
 }
 
 func firstLetterToLowercase(text string) string {
-	return strings.ToLower(string(text[0:1])) + string(text[1:])
+	return strings.ToLower(text[0:1]) + text[1:]
 }
 
 func extractReceiverAlias(structType string) string {
-	var result = string(structType[0])
+	result := string(structType[0])
 	for i := len(structType) - 1; i > 0; i-- {
 		aChar := string(structType[i])
 		lowerChar := strings.ToLower(aChar)
@@ -32,7 +34,7 @@ func getTagOptions(tag, key string) []string {
 	if tag == "" {
 		return nil
 	}
-	var structTag = reflect.StructTag(strings.Replace(tag, "`", "", len(tag)))
+	structTag := reflect.StructTag(strings.Replace(tag, "`", "", len(tag)))
 	options, ok := structTag.Lookup(key)
 	if !ok {
 		return nil
@@ -45,19 +47,17 @@ func getSliceHelperTypeName(typeName string, isPointer bool) string {
 		return ""
 	}
 
-	var pluralName = firstLetterToUppercase(typeName) + "s"
+	pluralName := firstLetterToUppercase(typeName) + "s"
 	if isPointer {
 		pluralName += "Ptr"
 	}
-	return strings.Replace(pluralName, ".", "", -1)
+	return strings.ReplaceAll(pluralName, ".", "")
 }
 
-func isSkipable(options *Options, field *toolbox.FieldInfo) bool {
+func isSkippable(options *Options, field *toolbox.FieldInfo) bool {
 	if options := getTagOptions(field.Tag, options.TagName); len(options) > 0 {
-		for _, candidate := range options {
-			if candidate == "-" {
-				return true
-			}
+		if slices.Contains(options, "-") {
+			return true
 		}
 	}
 	return false
@@ -72,11 +72,11 @@ func wrapperIfNeeded(text, wrappingChar string) string {
 
 func getPoolName(typeName string) string {
 	typeName = strings.Replace(typeName, "*", "", 1)
-	return strings.Replace(typeName+"Pool", ".", "", -1)
+	return strings.ReplaceAll(typeName+"Pool", ".", "")
 }
 
 func getJSONKey(options *Options, field *toolbox.FieldInfo) string {
-	var key = field.Name
+	key := field.Name
 	if field.Tag != "" {
 		if options := getTagOptions(field.Tag, options.TagName); len(options) > 0 {
 			key = options[0]
@@ -89,7 +89,7 @@ func normalizeTypeName(typeName string) string {
 	return strings.Replace(typeName, "*", "", strings.Count(typeName, "*"))
 }
 
-func sortedKeys(m map[string]string) ([]string) {
+func sortedKeys(m map[string]string) []string {
 	keys := make([]string, len(m))
 	i := 0
 	for k := range m {

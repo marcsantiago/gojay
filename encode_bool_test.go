@@ -64,7 +64,7 @@ func TestEncoderBoolErrors(t *testing.T) {
 }
 
 func TestEncoderBoolNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -83,18 +83,18 @@ func TestEncoderBoolNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run("true", func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.BoolNullEmpty(false)
 			enc.AddBoolNullEmpty(true)
-			enc.Write()
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderBoolNullKeyEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -113,11 +113,11 @@ func TestEncoderBoolNullKeyEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run("true", func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.BoolKeyNullEmpty("foo", false)
 			enc.AddBoolKeyNullEmpty("bar", true)
-			enc.Write()
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}

@@ -17,7 +17,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			`"hello world"`,
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("utf8", func(t *testing.T) {
 		builder := &strings.Builder{}
@@ -28,7 +29,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			`"漢字𩸽"`,
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("utf8-multibyte", func(t *testing.T) {
 		str := "テュールスト マーティン ヤコブ 😁"
@@ -40,7 +42,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			`"テュールスト マーティン ヤコブ 😁"`,
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("escaped-sequence1", func(t *testing.T) {
 		str := `テュールスト マ\ーテ
@@ -53,7 +56,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			`"テュールスト マ\\ーテ\nィン ヤコブ 😁"`,
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("escaped-sequence2", func(t *testing.T) {
 		str := `テュールスト マ\ーテ
@@ -66,7 +70,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			`"テュールスト マ\\ーテ\nィン ヤコブ 😁\t"`,
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("escaped-sequence3", func(t *testing.T) {
 		str := "hello \r world 𝄞"
@@ -78,7 +83,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			`"hello \r world 𝄞"`,
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("escaped-sequence3", func(t *testing.T) {
 		str := "hello \b world 𝄞"
@@ -90,7 +96,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			`"hello \b world 𝄞"`,
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("escaped-sequence3", func(t *testing.T) {
 		str := "hello \f world 𝄞"
@@ -102,7 +109,8 @@ func TestEncoderStringEncodeAPI(t *testing.T) {
 			t,
 			"\"hello \\f world 𝄞\"",
 			builder.String(),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 }
 
@@ -138,7 +146,8 @@ func TestEncoderStringMarshalAPI(t *testing.T) {
 			t,
 			`"string"`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 	t.Run("utf8", func(t *testing.T) {
 		r, err := Marshal("漢字")
@@ -147,12 +156,13 @@ func TestEncoderStringMarshalAPI(t *testing.T) {
 			t,
 			`"漢字"`,
 			string(r),
-			"Result of marshalling is different as the one expected")
+			"Result of marshalling is different as the one expected",
+		)
 	})
 }
 
 func TestEncoderStringNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -176,18 +186,18 @@ func TestEncoderStringNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run("true", func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.StringNullEmpty("")
 			enc.AddStringNullEmpty("true")
-			enc.Write()
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderStringNullEmpty2(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -201,17 +211,17 @@ func TestEncoderStringNullEmpty2(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run("true", func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.StringNullEmpty("test")
-			enc.Write()
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderStringNullKeyEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -230,11 +240,11 @@ func TestEncoderStringNullKeyEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run("true", func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
 			enc.StringKeyNullEmpty("foo", "")
 			enc.AddStringKeyNullEmpty("bar", "true")
-			enc.Write()
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
