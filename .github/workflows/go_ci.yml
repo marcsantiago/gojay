@@ -1,0 +1,49 @@
+name: Go CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Go Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [4]
+        ci_node_index: [0, 1, 2, 3]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.27.0'
+          cache: true
+
+      - name: Run Tests (Partitioned)
+        run: |
+          packages=$(go list ./... | sed 's/* //g')
+
+          I=0
+          JOBS=()
+
+          while IFS= read -r pkg; do
+            I=$(( I + 1 ))
+
+            if [ "$(expr "$I" % "$CI_NODE_TOTAL")" -eq "$CI_NODE_INDEX" ]; then
+              JOBS+=("$pkg")
+            fi
+
+          done <<< "$packages"
+
+          go test "${JOBS[@]}"
+        env:
+          GOPATH: /home/runner/work/gojay/go

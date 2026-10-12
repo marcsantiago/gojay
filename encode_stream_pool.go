@@ -21,9 +21,9 @@ func (s stream) NewEncoder(w io.Writer) *StreamEncoder {
 func (s stream) BorrowEncoder(w io.Writer) *StreamEncoder {
 	streamEnc := streamEncPool.Get().(*StreamEncoder)
 	streamEnc.w = w
-	streamEnc.Encoder.err = nil
+	streamEnc.err = nil
 	streamEnc.done = make(chan struct{}, 1)
-	streamEnc.Encoder.buf = streamEnc.buf[:0]
+	streamEnc.buf = streamEnc.buf[:0]
 	streamEnc.nConsumer = 1
 	streamEnc.isPooled = 0
 	return streamEnc
@@ -33,6 +33,6 @@ func (s stream) borrowEncoder(w io.Writer) *StreamEncoder {
 	streamEnc := streamEncPool.Get().(*StreamEncoder)
 	streamEnc.isPooled = 0
 	streamEnc.w = w
-	streamEnc.Encoder.err = nil
+	streamEnc.err = nil
 	return streamEnc
 }

@@ -2,11 +2,12 @@ package codegen
 
 import (
 	"fmt"
-	"github.com/viant/toolbox"
 	"strings"
+
+	"github.com/viant/toolbox"
 )
 
-//Field represents a field.
+// Field represents a field.
 type Field struct {
 	Key                string
 	Init               string
@@ -16,9 +17,9 @@ type Field struct {
 	Name               string
 	Accessor           string
 	Mutator            string
-	Receiver           string //alias and type name
-	Alias              string //object alias name
-	Var                string //variable for this field
+	Receiver           string // alias and type name
+	Alias              string // object alias name
+	Var                string // variable for this field
 	Type               string
 	RawType            string
 	HelperType         string
@@ -26,17 +27,17 @@ type Field struct {
 	RawComponentType   string
 	IsPointerComponent bool
 
-	PointerModifier     string //takes field pointer, "&" if field is not a pointer type
-	DereferenceModifier string //take pointer value, i.e "*" if field has a pointer type
+	PointerModifier     string // takes field pointer, "&" if field is not a pointer type
+	DereferenceModifier string // take pointer value, i.e "*" if field has a pointer type
 
-	ComponentPointerModifier     string //takes item pointer if needed,i.e
-	ComponentDereferenceModifier string //de reference value if needed, i.e
-	ComponentInitModifier        string //takes item pointer if type is not a pointer type
-	ComponentInit                string //initialises component type
+	ComponentPointerModifier     string // takes item pointer if needed,i.e
+	ComponentDereferenceModifier string // de reference value if needed, i.e
+	ComponentInitModifier        string // takes item pointer if type is not a pointer type
+	ComponentInit                string // initialises component type
 
 	DecodingMethod  string
 	EncodingMethod  string
-	PoolName        string //pool name associated with this field
+	PoolName        string // pool name associated with this field
 	ResetDependency string
 	Reset           string
 	IsAnonymous     bool
@@ -46,16 +47,16 @@ type Field struct {
 	GojayMethod string
 }
 
-//NewField returns a new field
+// NewField returns a new field
 func NewField(owner *Struct, field *toolbox.FieldInfo, fieldType *toolbox.TypeInfo) (*Field, error) {
 	typeName := normalizeTypeName(field.TypeName)
-	var result = &Field{
+	result := &Field{
 		IsAnonymous:        field.IsAnonymous,
 		Name:               field.Name,
 		RawType:            field.TypeName,
 		IsPointer:          field.IsPointer,
 		Key:                getJSONKey(owner.options, field),
-		Receiver:           owner.Alias + " *" + owner.TypeInfo.Name,
+		Receiver:           owner.Alias + " *" + owner.Name,
 		Type:               typeName,
 		Mutator:            owner.Alias + "." + field.Name,
 		Accessor:           owner.Alias + "." + field.Name,
@@ -75,7 +76,6 @@ func NewField(owner *Struct, field *toolbox.FieldInfo, fieldType *toolbox.TypeIn
 		result.Init = "&" + result.Init
 	} else {
 		result.PointerModifier = "&"
-
 	}
 	if field.IsSlice {
 		result.HelperType = getSliceHelperTypeName(field.ComponentType, field.IsPointerComponent)
@@ -122,7 +122,7 @@ func NewField(owner *Struct, field *toolbox.FieldInfo, fieldType *toolbox.TypeIn
 		result.Reset = "false"
 	default:
 		if field.IsSlice && owner.Type(field.ComponentType) != nil {
-			var itemPointer = ""
+			itemPointer := ""
 			if !field.IsPointerComponent {
 				itemPointer = "&"
 			}

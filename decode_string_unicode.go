@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	invalidCodePoint = InvalidJSONError("Invalid unicode code point")
-	invalidJson      = InvalidJSONError("Invalid JSON")
+	errInvalidCodePoint = InvalidJSONError("Invalid unicode code point")
+	errInvalidJSON      = InvalidJSONError("Invalid JSON")
 
 	unicodeReplacement = make([]byte, 3)
 	_                  = utf8.EncodeRune(unicodeReplacement, unicode.ReplacementChar)
@@ -26,7 +26,7 @@ func (dec *Decoder) getUnicode() (rune, error) {
 		} else if c >= 'A' && c <= 'F' {
 			r = r*16 + rune(c-'A'+10)
 		} else {
-			return 0, invalidCodePoint
+			return 0, errInvalidCodePoint
 		}
 		i++
 	}
@@ -48,7 +48,7 @@ func (dec *Decoder) appendEscapeChar(str []byte, c byte) ([]byte, error) {
 	case '\\':
 		str = append(str, '\\')
 	default:
-		return nil, invalidJson
+		return nil, errInvalidJSON
 	}
 	return str, nil
 }
@@ -57,7 +57,7 @@ func (dec *Decoder) parseUnicode() ([]byte, error) {
 	// get unicode after u
 	r, err := dec.getUnicode()
 	if err != nil {
-		if err == invalidCodePoint {
+		if err == errInvalidCodePoint {
 			if dec.disableStrictUnicode {
 				return unicodeReplacement, nil
 			}
@@ -65,7 +65,7 @@ func (dec *Decoder) parseUnicode() ([]byte, error) {
 		return nil, err
 	}
 	// no error start making new string
-	str := make([]byte, 16, 16)
+	str := make([]byte, 16)
 	i := 0
 	// check if code can be a surrogate utf16
 	if utf16.IsSurrogate(r) {
@@ -96,7 +96,7 @@ func (dec *Decoder) parseUnicode() ([]byte, error) {
 		dec.cursor++
 		r2, err := dec.getUnicode()
 		if err != nil {
-			if err == invalidCodePoint {
+			if err == errInvalidCodePoint {
 				if dec.disableStrictUnicode {
 					return unicodeReplacement, nil
 				}

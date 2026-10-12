@@ -25,7 +25,7 @@ func TestSliceInts(t *testing.T) {
 		json           string
 		expectedResult testSliceInts
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-test",
@@ -104,7 +104,7 @@ func TestSliceStrings(t *testing.T) {
 		json           string
 		expectedResult testSliceStrings
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-test",
@@ -175,7 +175,7 @@ func TestSliceBools(t *testing.T) {
 		json           string
 		expectedResult testSliceBools
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-test",
@@ -241,7 +241,7 @@ func TestSliceSlices(t *testing.T) {
 		json           string
 		expectedResult testSliceSlicesSlices
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name:           "basic-test",
@@ -304,7 +304,7 @@ func TestSliceObjects(t *testing.T) {
 		json           string
 		expectedResult testSliceObjects
 		err            bool
-		errType        interface{}
+		errType        any
 	}{
 		{
 			name: "basic-test",
@@ -526,13 +526,13 @@ func TestUnmarshalJSONArrays(t *testing.T) {
 		name         string
 		v            UnmarshalerJSONArray
 		d            []byte
-		expectations func(err error, v interface{}, t *testing.T)
+		expectations func(err error, v any, t *testing.T)
 	}{
 		{
 			v:    new(testDecodeSlice),
 			d:    []byte(`[{"test":"test"}]`),
 			name: "test decode slice",
-			expectations: func(err error, v interface{}, t *testing.T) {
+			expectations: func(err error, v any, t *testing.T) {
 				vtPtr := v.(*testDecodeSlice)
 				vt := *vtPtr
 				assert.Nil(t, err, "err must be nil")
@@ -544,7 +544,7 @@ func TestUnmarshalJSONArrays(t *testing.T) {
 			v:    new(testDecodeSlice),
 			d:    []byte(`[{"test":"test"},{"test":"test2"}]`),
 			name: "test decode slice",
-			expectations: func(err error, v interface{}, t *testing.T) {
+			expectations: func(err error, v any, t *testing.T) {
 				vtPtr := v.(*testDecodeSlice)
 				vt := *vtPtr
 				assert.Nil(t, err, "err must be nil")
@@ -557,14 +557,13 @@ func TestUnmarshalJSONArrays(t *testing.T) {
 			v:    new(testDecodeSlice),
 			d:    []byte(`invalid json`),
 			name: "test decode object null",
-			expectations: func(err error, v interface{}, t *testing.T) {
+			expectations: func(err error, v any, t *testing.T) {
 				assert.NotNil(t, err, "err must not be nil")
 				assert.IsType(t, InvalidJSONError(""), err, "err must be of type InvalidJSONError")
 			},
 		},
 	}
 	for _, testCase := range testCases {
-		testCase := testCase
 		t.Run(testCase.name, func(*testing.T) {
 			err := UnmarshalJSONArray(testCase.d, testCase.v)
 			testCase.expectations(err, testCase.v, t)

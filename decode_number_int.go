@@ -14,6 +14,7 @@ func (dec *Decoder) DecodeInt(v *int) error {
 	}
 	return dec.decodeInt(v)
 }
+
 func (dec *Decoder) decodeInt(v *int) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -121,6 +122,7 @@ func (dec *Decoder) DecodeInt16(v *int16) error {
 	}
 	return dec.decodeInt16(v)
 }
+
 func (dec *Decoder) decodeInt16(v *int16) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -160,6 +162,7 @@ func (dec *Decoder) decodeInt16(v *int16) error {
 	}
 	return dec.raiseInvalidJSONErr(dec.cursor)
 }
+
 func (dec *Decoder) decodeInt16Null(v **int16) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -220,8 +223,8 @@ func (dec *Decoder) getInt16Negative() (int16, error) {
 }
 
 func (dec *Decoder) getInt16() (int16, error) {
-	var end = dec.cursor
-	var start = dec.cursor
+	end := dec.cursor
+	start := dec.cursor
 	// look for following numbers
 	for j := dec.cursor + 1; j < dec.length || dec.read(); j++ {
 		switch dec.data[j] {
@@ -300,7 +303,7 @@ func (dec *Decoder) getInt16() (int16, error) {
 
 func (dec *Decoder) getInt16WithExp(init int16) (int16, error) {
 	var exp uint16
-	var sign = int16(1)
+	sign := int16(1)
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch dec.data[dec.cursor] {
 		case '+':
@@ -353,6 +356,7 @@ func (dec *Decoder) DecodeInt8(v *int8) error {
 	}
 	return dec.decodeInt8(v)
 }
+
 func (dec *Decoder) decodeInt8(v *int8) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -392,6 +396,7 @@ func (dec *Decoder) decodeInt8(v *int8) error {
 	}
 	return dec.raiseInvalidJSONErr(dec.cursor)
 }
+
 func (dec *Decoder) decodeInt8Null(v **int8) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -452,8 +457,8 @@ func (dec *Decoder) getInt8Negative() (int8, error) {
 }
 
 func (dec *Decoder) getInt8() (int8, error) {
-	var end = dec.cursor
-	var start = dec.cursor
+	end := dec.cursor
+	start := dec.cursor
 	// look for following numbers
 	for j := dec.cursor + 1; j < dec.length || dec.read(); j++ {
 		switch dec.data[j] {
@@ -532,7 +537,7 @@ func (dec *Decoder) getInt8() (int8, error) {
 
 func (dec *Decoder) getInt8WithExp(init int8) (int8, error) {
 	var exp uint8
-	var sign = int8(1)
+	sign := int8(1)
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch dec.data[dec.cursor] {
 		case '+':
@@ -584,6 +589,7 @@ func (dec *Decoder) DecodeInt32(v *int32) error {
 	}
 	return dec.decodeInt32(v)
 }
+
 func (dec *Decoder) decodeInt32(v *int32) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -622,6 +628,7 @@ func (dec *Decoder) decodeInt32(v *int32) error {
 	}
 	return dec.raiseInvalidJSONErr(dec.cursor)
 }
+
 func (dec *Decoder) decodeInt32Null(v **int32) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -681,8 +688,8 @@ func (dec *Decoder) getInt32Negative() (int32, error) {
 }
 
 func (dec *Decoder) getInt32() (int32, error) {
-	var end = dec.cursor
-	var start = dec.cursor
+	end := dec.cursor
+	start := dec.cursor
 	// look for following numbers
 	for j := dec.cursor + 1; j < dec.length || dec.read(); j++ {
 		switch dec.data[j] {
@@ -762,7 +769,7 @@ func (dec *Decoder) getInt32() (int32, error) {
 
 func (dec *Decoder) getInt32WithExp(init int32) (int32, error) {
 	var exp uint32
-	var sign = int32(1)
+	sign := int32(1)
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch dec.data[dec.cursor] {
 		case '+':
@@ -853,6 +860,7 @@ func (dec *Decoder) decodeInt64(v *int64) error {
 	}
 	return dec.raiseInvalidJSONErr(dec.cursor)
 }
+
 func (dec *Decoder) decodeInt64Null(v **int64) error {
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch c := dec.data[dec.cursor]; c {
@@ -912,8 +920,8 @@ func (dec *Decoder) getInt64Negative() (int64, error) {
 }
 
 func (dec *Decoder) getInt64() (int64, error) {
-	var end = dec.cursor
-	var start = dec.cursor
+	end := dec.cursor
+	start := dec.cursor
 	// look for following numbers
 	for j := dec.cursor + 1; j < dec.length || dec.read(); j++ {
 		switch dec.data[j] {
@@ -993,7 +1001,7 @@ func (dec *Decoder) getInt64() (int64, error) {
 
 func (dec *Decoder) getInt64WithExp(init int64) (int64, error) {
 	var exp uint64
-	var sign = int64(1)
+	sign := int64(1)
 	for ; dec.cursor < dec.length || dec.read(); dec.cursor++ {
 		switch dec.data[dec.cursor] {
 		case '+':
@@ -1036,8 +1044,8 @@ func (dec *Decoder) getInt64WithExp(init int64) (int64, error) {
 }
 
 func (dec *Decoder) atoi64(start, end int) int64 {
-	var ll = end + 1 - start
-	var val = int64(digits[dec.data[start]])
+	ll := end + 1 - start
+	val := int64(digits[dec.data[start]])
 	end = end + 1
 	if ll < maxInt64Length {
 		for i := start + 1; i < end; i++ {
@@ -1067,8 +1075,8 @@ func (dec *Decoder) atoi64(start, end int) int64 {
 }
 
 func (dec *Decoder) atoi32(start, end int) int32 {
-	var ll = end + 1 - start
-	var val = int32(digits[dec.data[start]])
+	ll := end + 1 - start
+	val := int32(digits[dec.data[start]])
 	end = end + 1
 
 	// overflowing
@@ -1099,8 +1107,8 @@ func (dec *Decoder) atoi32(start, end int) int32 {
 }
 
 func (dec *Decoder) atoi16(start, end int) int16 {
-	var ll = end + 1 - start
-	var val = int16(digits[dec.data[start]])
+	ll := end + 1 - start
+	val := int16(digits[dec.data[start]])
 	end = end + 1
 	// overflowing
 	if ll < maxInt16Length {
@@ -1130,18 +1138,18 @@ func (dec *Decoder) atoi16(start, end int) int16 {
 }
 
 func (dec *Decoder) atoi8(start, end int) int8 {
-	var ll = end + 1 - start
-	var val = int8(digits[dec.data[start]])
+	ll := end + 1 - start
+	val := digits[dec.data[start]]
 	end = end + 1
 	// overflowing
 	if ll < maxInt8Length {
 		for i := start + 1; i < end; i++ {
-			intv := int8(digits[dec.data[i]])
+			intv := digits[dec.data[i]]
 			val = (val << 3) + (val << 1) + intv
 		}
 	} else if ll == maxInt8Length {
 		for i := start + 1; i < end; i++ {
-			intv := int8(digits[dec.data[i]])
+			intv := digits[dec.data[i]]
 			if val > maxInt8toMultiply {
 				dec.err = dec.makeInvalidUnmarshalErr(val)
 				return 0

@@ -310,7 +310,7 @@ func (enc *Encoder) AddSQLNullBool(v *sql.NullBool) {
 // AddSQLNullBoolOmitEmpty adds a string to be encoded or skips it if it is zero value.
 // Must be used inside a slice or array encoding (does not encode a key)
 func (enc *Encoder) AddSQLNullBoolOmitEmpty(v *sql.NullBool) {
-	if v != nil && v.Valid && v.Bool != false {
+	if v != nil && v.Valid && v.Bool {
 		enc.BoolOmitEmpty(v.Bool)
 	}
 }
@@ -323,7 +323,7 @@ func (enc *Encoder) AddSQLNullBoolKey(key string, v *sql.NullBool) {
 // AddSQLNullBoolKeyOmitEmpty adds a string to be encoded or skips it if it is zero value.
 // Must be used inside an object as it will encode a key
 func (enc *Encoder) AddSQLNullBoolKeyOmitEmpty(key string, v *sql.NullBool) {
-	if v != nil && v.Valid && v.Bool != false {
+	if v != nil && v.Valid && v.Bool {
 		enc.BoolKeyOmitEmpty(key, v.Bool)
 	}
 }
@@ -343,7 +343,7 @@ func (enc *Encoder) SQLNullBool(v *sql.NullBool) {
 
 // SQLNullBoolOmitEmpty adds a string to be encoded, must be used inside an object as it will encode a key
 func (enc *Encoder) SQLNullBoolOmitEmpty(v *sql.NullBool) {
-	if v != nil && v.Valid && v.Bool != false {
+	if v != nil && v.Valid && v.Bool {
 		enc.Bool(v.Bool)
 	}
 }
@@ -363,7 +363,7 @@ func (enc *Encoder) SQLNullBoolKey(key string, v *sql.NullBool) {
 // SQLNullBoolKeyOmitEmpty adds a string to be encoded or skips it if it is zero value.
 // Must be used inside an object as it will encode a key
 func (enc *Encoder) SQLNullBoolKeyOmitEmpty(key string, v *sql.NullBool) {
-	if v != nil && v.Valid && v.Bool != false {
+	if v != nil && v.Valid && v.Bool {
 		enc.BoolKeyOmitEmpty(key, v.Bool)
 	}
 }

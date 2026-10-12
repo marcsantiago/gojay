@@ -9,7 +9,7 @@ func (enc *Encoder) EncodeTime(t *time.Time, format string) error {
 	if enc.isPooled == 1 {
 		panic(InvalidUsagePooledEncoderError("Invalid usage of pooled encoder"))
 	}
-	_, _ = enc.encodeTime(t, format)
+	_ = enc.encodeTime(t, format)
 	_, err := enc.Write()
 	if err != nil {
 		return err
@@ -18,11 +18,11 @@ func (enc *Encoder) EncodeTime(t *time.Time, format string) error {
 }
 
 // encodeInt encodes an int to JSON
-func (enc *Encoder) encodeTime(t *time.Time, format string) ([]byte, error) {
+func (enc *Encoder) encodeTime(t *time.Time, format string) []byte {
 	enc.writeByte('"')
 	enc.buf = t.AppendFormat(enc.buf, format)
 	enc.writeByte('"')
-	return enc.buf, nil
+	return enc.buf
 }
 
 // AddTimeKey adds an *time.Time to be encoded with the given format, must be used inside an object as it will encode a key

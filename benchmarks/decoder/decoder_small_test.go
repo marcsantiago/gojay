@@ -18,11 +18,11 @@ func TestGoJayDecodeObjSmall(t *testing.T) {
 	assert.Equal(t, result.Gr, 0, "result.Gr should be 0")
 	assert.Equal(
 		t,
-		result.Uuid,
+		result.UUID,
 		"de305d54-75b4-431b-adb2-eb6b9e546014",
 		"result.Gr should be 'de305d54-75b4-431b-adb2-eb6b9e546014'",
 	)
-	assert.Equal(t, result.Ip, "127.0.0.1", "result.Ip should be '127.0.0.1'")
+	assert.Equal(t, result.IP, "127.0.0.1", "result.Ip should be '127.0.0.1'")
 	assert.Equal(t, result.Ua, "user_agent", "result.Ua should be 'user_agent'")
 	assert.Equal(t, result.Tz, -6, "result.Tz should be 6")
 	assert.Equal(t, result.V, 1, "result.V should be 1")

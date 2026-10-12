@@ -35,7 +35,7 @@ func (dec *Decoder) decodeArray(arr UnmarshalerJSONArray) (int, error) {
 				// closing array
 				if dec.data[dec.cursor] == ']' {
 					dec.cursor = dec.cursor + 1
-					dec.skipArrayDataBlock =  false
+					dec.skipArrayDataBlock = false
 					return dec.cursor, nil
 				}
 
@@ -75,7 +75,7 @@ func (dec *Decoder) decodeArray(arr UnmarshalerJSONArray) (int, error) {
 	}
 	return 0, dec.raiseInvalidJSONErr(dec.cursor)
 }
-func (dec *Decoder) decodeArrayNull(v interface{}) (int, error) {
+func (dec *Decoder) decodeArrayNull(v any) (int, error) {
 	// remember last array index in case of nested arrays
 	lastArrayIndex := dec.arrayIndex
 	dec.arrayIndex = 0
@@ -84,7 +84,7 @@ func (dec *Decoder) decodeArrayNull(v interface{}) (int, error) {
 	}()
 	vv := reflect.ValueOf(v)
 	vvt := vv.Type()
-	if vvt.Kind() != reflect.Ptr || vvt.Elem().Kind() != reflect.Ptr {
+	if vvt.Kind() != reflect.Pointer || vvt.Elem().Kind() != reflect.Pointer {
 		dec.err = ErrUnmarshalPtrExpected
 		return 0, dec.err
 	}
@@ -101,7 +101,7 @@ func (dec *Decoder) decodeArrayNull(v interface{}) (int, error) {
 			n := reflect.New(elt.Type().Elem())
 			var arr UnmarshalerJSONArray
 			var ok bool
-			if arr, ok = n.Interface().(UnmarshalerJSONArray); !ok {
+			if arr, ok = reflect.TypeAssert[UnmarshalerJSONArray](n); !ok {
 				dec.err = dec.makeInvalidUnmarshalErr((UnmarshalerJSONArray)(nil))
 				return 0, dec.err
 			}
@@ -221,7 +221,7 @@ func (dec *Decoder) AddArray(v UnmarshalerJSONArray) error {
 }
 
 // AddArrayNull decodes the JSON value within an object or an array to a UnmarshalerJSONArray.
-func (dec *Decoder) AddArrayNull(v interface{}) error {
+func (dec *Decoder) AddArrayNull(v any) error {
 	return dec.ArrayNull(v)
 }
 
@@ -240,7 +240,7 @@ func (dec *Decoder) Array(v UnmarshalerJSONArray) error {
 // v should be a pointer to an UnmarshalerJSONArray,
 // if `null` value is encountered in JSON, it will leave the value v untouched,
 // else it will create a new instance of the UnmarshalerJSONArray behind v.
-func (dec *Decoder) ArrayNull(v interface{}) error {
+func (dec *Decoder) ArrayNull(v any) error {
 	newCursor, err := dec.decodeArrayNull(v)
 	if err != nil {
 		return err

@@ -7,12 +7,15 @@ import (
 	"github.com/marcsantiago/gojay/gojay/codegen"
 )
 
-var pkg = flag.String("pkg", "", "the package name of the generated file")
-var dst = flag.String("o", "", "destination file to output generated code")
-var src = flag.String("s", "", "source dir or file (absolute or relative path)")
-var types = flag.String("t", "", "types to generate")
-var annotation = flag.String("a", "json", "annotation tag (default json)")
-var poolObjects = flag.String("p", "", "generate code to reuse objects using sync.Pool")
+//nolint:unused
+var (
+	pkg         = flag.String("pkg", "", "the package name of the generated file")
+	dst         = flag.String("o", "", "destination file to output generated code")
+	src         = flag.String("s", "", "source dir or file (absolute or relative path)")
+	types       = flag.String("t", "", "types to generate")
+	annotation  = flag.String("a", "json", "annotation tag (default json)")
+	poolObjects = flag.String("p", "", "generate code to reuse objects using sync.Pool")
+)
 
 func main() {
 	flag.Parse()

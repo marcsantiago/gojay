@@ -24,6 +24,7 @@ func (m *Message) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
 	}
 	return nil
 }
+
 func (m *Message) NKeys() int {
 	return 2
 }
@@ -32,8 +33,9 @@ func (m *Message) MarshalJSONObject(enc *gojay.Encoder) {
 	enc.AddStringKey("message", m.Message)
 	enc.AddStringKey("userName", m.UserName)
 }
-func (u *Message) IsNil() bool {
-	return u == nil
+
+func (m *Message) IsNil() bool {
+	return m == nil
 }
 
 // Here are defined our communication types
@@ -67,23 +69,23 @@ type SenderReceiver struct {
 	Conn    *websocket.Conn
 }
 
-func (sc *SenderReceiver) SetReceiver() {
-	sc.Receive = Receiver(make(chan *Message))
-	sc.Dec = gojay.Stream.BorrowDecoder(sc.Conn)
-	go sc.Dec.DecodeStream(sc.Receive)
+func (c *SenderReceiver) SetReceiver() {
+	c.Receive = Receiver(make(chan *Message))
+	c.Dec = gojay.Stream.BorrowDecoder(c.Conn)
+	go func() { _ = c.Dec.DecodeStream(c.Receive) }()
 }
 
-func (sc *SenderReceiver) SetSender(nCons int) {
-	sc.Send = Sender(make(chan gojay.MarshalerJSONObject))
-	sc.Enc = gojay.Stream.BorrowEncoder(sc.Conn).NConsumer(nCons).LineDelimited()
-	go sc.Enc.EncodeStream(sc.Send)
+func (c *SenderReceiver) SetSender(nCons int) {
+	c.Send = Sender(make(chan gojay.MarshalerJSONObject))
+	c.Enc = gojay.Stream.BorrowEncoder(c.Conn).NConsumer(nCons).LineDelimited()
+	go c.Enc.EncodeStream(c.Send)
 }
 
-func (sc *SenderReceiver) SendMessage(m gojay.MarshalerJSONObject) error {
+func (c *SenderReceiver) SendMessage(m gojay.MarshalerJSONObject) error {
 	select {
-	case <-sc.Enc.Done():
+	case <-c.Enc.Done():
 		return errors.New("sender closed")
-	case sc.Send <- m:
+	case c.Send <- m:
 		log.Print("message sent by client: ", m)
 		return nil
 	}
@@ -100,8 +102,8 @@ func (c *SenderReceiver) OnMessage(f func(*Message)) error {
 	}
 }
 
-func (sc *SenderReceiver) Init(sender int) *SenderReceiver {
-	sc.SetSender(sender)
-	sc.SetReceiver()
-	return sc
+func (c *SenderReceiver) Init(sender int) *SenderReceiver {
+	c.SetSender(sender)
+	c.SetReceiver()
+	return c
 }

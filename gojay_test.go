@@ -29,12 +29,14 @@ type testObject struct {
 	testBoolNull    *bool
 	testSubObject   *testObject
 	testSubArray    testSliceInts
-	testInterface   interface{}
+	testInterface   any
 }
 
 // make sure it implements interfaces
-var _ MarshalerJSONObject = &testObject{}
-var _ UnmarshalerJSONObject = &testObject{}
+var (
+	_ MarshalerJSONObject   = &testObject{}
+	_ UnmarshalerJSONObject = &testObject{}
+)
 
 func (t *testObject) IsNil() bool {
 	return t == nil
@@ -134,14 +136,14 @@ type testObject0Keys struct {
 	testFloat64   float64
 	testFloat32   float32
 	testBool      bool
-	testSubObject *testObject0Keys
-	testSubArray  testSliceInts
-	testInterface interface{}
+	testInterface any
 }
 
 // make sure it implements interfaces
-var _ MarshalerJSONObject = &testObject0Keys{}
-var _ UnmarshalerJSONObject = &testObject0Keys{}
+var (
+	_ MarshalerJSONObject   = &testObject0Keys{}
+	_ UnmarshalerJSONObject = &testObject0Keys{}
+)
 
 func (t *testObject0Keys) IsNil() bool {
 	return t == nil
@@ -238,8 +240,10 @@ func (t *testObjectComplex) NKeys() int {
 }
 
 // make sure it implements interfaces
-var _ MarshalerJSONObject = &testObjectComplex{}
-var _ UnmarshalerJSONObject = &testObjectComplex{}
+var (
+	_ MarshalerJSONObject   = &testObjectComplex{}
+	_ UnmarshalerJSONObject = &testObjectComplex{}
+)
 
 type TestObj struct {
 	test        int

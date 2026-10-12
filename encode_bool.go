@@ -75,7 +75,7 @@ func (enc *Encoder) Bool(v bool) {
 
 // BoolOmitEmpty adds a bool to be encoded, must be used inside a slice or array encoding (does not encode a key)
 func (enc *Encoder) BoolOmitEmpty(v bool) {
-	if v == false {
+	if !v {
 		return
 	}
 	enc.grow(5)
@@ -93,7 +93,7 @@ func (enc *Encoder) BoolNullEmpty(v bool) {
 	if r != '[' {
 		enc.writeByte(',')
 	}
-	if v == false {
+	if !v {
 		enc.writeBytes(nullBytes)
 		return
 	}
@@ -126,7 +126,7 @@ func (enc *Encoder) BoolKeyOmitEmpty(key string, v bool) {
 			return
 		}
 	}
-	if v == false {
+	if !v {
 		return
 	}
 	enc.grow(5 + len(key))
@@ -156,7 +156,7 @@ func (enc *Encoder) BoolKeyNullEmpty(key string, v bool) {
 	enc.writeByte('"')
 	enc.writeStringEscape(key)
 	enc.writeBytes(objKey)
-	if v == false {
+	if !v {
 		enc.writeBytes(nullBytes)
 		return
 	}

@@ -116,14 +116,14 @@ func TestAddSQLNullStringKey(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullStringKey("foo", &testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullStringKey("foo", &testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -165,14 +165,14 @@ func TestAddSQLNullStringKey(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullStringKeyOmitEmpty("foo", &testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullStringKeyOmitEmpty("foo", &testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -223,14 +223,14 @@ func TestAddSQLNullString(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullString(&testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullString(&testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -272,14 +272,14 @@ func TestAddSQLNullString(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullStringOmitEmpty(&testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullStringOmitEmpty(&testCase.sqlNullString)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -393,14 +393,14 @@ func TestAddSQLNullInt64Key(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullInt64Key("foo", &testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullInt64Key("foo", &testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -442,14 +442,14 @@ func TestAddSQLNullInt64Key(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullInt64KeyOmitEmpty("foo", &testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullInt64KeyOmitEmpty("foo", &testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -500,14 +500,14 @@ func TestAddSQLNullInt64(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullInt64(&testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullInt64(&testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -549,14 +549,14 @@ func TestAddSQLNullInt64(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullInt64OmitEmpty(&testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullInt64OmitEmpty(&testCase.sqlNullInt64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -671,14 +671,14 @@ func TestAddSQLNullFloat64Key(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullFloat64Key("foo", &testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullFloat64Key("foo", &testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -720,14 +720,14 @@ func TestAddSQLNullFloat64Key(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullFloat64KeyOmitEmpty("foo", &testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullFloat64KeyOmitEmpty("foo", &testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -778,14 +778,14 @@ func TestAddSQLNullFloat64(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullFloat64(&testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullFloat64(&testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -827,14 +827,14 @@ func TestAddSQLNullFloat64(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullFloat64OmitEmpty(&testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullFloat64OmitEmpty(&testCase.sqlNullFloat64)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -949,14 +949,14 @@ func TestAddSQLNullBoolKey(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullBoolKey("foo", &testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullBoolKey("foo", &testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -998,14 +998,14 @@ func TestAddSQLNullBoolKey(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullBoolKeyOmitEmpty("foo", &testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullBoolKeyOmitEmpty("foo", &testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -1056,14 +1056,14 @@ func TestAddSQLNullBool(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullBool(&testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullBool(&testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -1105,14 +1105,14 @@ func TestAddSQLNullBool(t *testing.T) {
 					enc := NewEncoder(&b)
 					enc.writeString(testCase.baseJSON)
 					enc.AddSQLNullBoolOmitEmpty(&testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b.String())
 
 					var b2 strings.Builder
 					enc = NewEncoder(&b2)
 					enc.writeString(testCase.baseJSON)
 					enc.SQLNullBoolOmitEmpty(&testCase.sqlNullBool)
-					enc.Write()
+					_, _ = enc.Write()
 					assert.Equal(t, testCase.expectedResult, b2.String())
 				})
 			}
@@ -1121,7 +1121,7 @@ func TestAddSQLNullBool(t *testing.T) {
 }
 
 func TestEncoderSQLNullStringEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1140,18 +1140,18 @@ func TestEncoderSQLNullStringEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.AddSQLNullStringNullEmpty(&sql.NullString{"", true})
-			enc.SQLNullStringNullEmpty(&sql.NullString{"bar", true})
-			enc.Write()
+			enc.AddSQLNullStringNullEmpty(&sql.NullString{String: "", Valid: true})
+			enc.SQLNullStringNullEmpty(&sql.NullString{String: "bar", Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderSQLNullStringKeyNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1170,18 +1170,18 @@ func TestEncoderSQLNullStringKeyNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.SQLNullStringKeyNullEmpty("foo", &sql.NullString{"", true})
-			enc.SQLNullStringKeyNullEmpty("bar", &sql.NullString{"bar", true})
-			enc.Write()
+			enc.SQLNullStringKeyNullEmpty("foo", &sql.NullString{String: "", Valid: true})
+			enc.SQLNullStringKeyNullEmpty("bar", &sql.NullString{String: "bar", Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderSQLNullBoolEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1200,18 +1200,18 @@ func TestEncoderSQLNullBoolEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.SQLNullBoolNullEmpty(&sql.NullBool{false, true})
-			enc.SQLNullBoolNullEmpty(&sql.NullBool{true, true})
-			enc.Write()
+			enc.SQLNullBoolNullEmpty(&sql.NullBool{Bool: false, Valid: true})
+			enc.SQLNullBoolNullEmpty(&sql.NullBool{Bool: true, Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderSQLNullBoolKeyNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1230,18 +1230,18 @@ func TestEncoderSQLNullBoolKeyNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.AddSQLNullBoolKeyNullEmpty("foo", &sql.NullBool{false, true})
-			enc.SQLNullBoolKeyNullEmpty("bar", &sql.NullBool{true, true})
-			enc.Write()
+			enc.AddSQLNullBoolKeyNullEmpty("foo", &sql.NullBool{Bool: false, Valid: true})
+			enc.SQLNullBoolKeyNullEmpty("bar", &sql.NullBool{Bool: true, Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderSQLNullInt64Empty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1260,18 +1260,18 @@ func TestEncoderSQLNullInt64Empty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.AddSQLNullInt64NullEmpty(&sql.NullInt64{0, true})
-			enc.SQLNullInt64NullEmpty(&sql.NullInt64{1, true})
-			enc.Write()
+			enc.AddSQLNullInt64NullEmpty(&sql.NullInt64{Int64: 0, Valid: true})
+			enc.SQLNullInt64NullEmpty(&sql.NullInt64{Int64: 1, Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderSQLNullInt64KeyNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1290,18 +1290,18 @@ func TestEncoderSQLNullInt64KeyNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.AddSQLNullInt64KeyNullEmpty("foo", &sql.NullInt64{0, true})
-			enc.SQLNullInt64KeyNullEmpty("bar", &sql.NullInt64{1, true})
-			enc.Write()
+			enc.AddSQLNullInt64KeyNullEmpty("foo", &sql.NullInt64{Int64: 0, Valid: true})
+			enc.SQLNullInt64KeyNullEmpty("bar", &sql.NullInt64{Int64: 1, Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderSQLNullFloat64Empty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1320,18 +1320,18 @@ func TestEncoderSQLNullFloat64Empty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.AddSQLNullFloat64NullEmpty(&sql.NullFloat64{0, true})
-			enc.SQLNullFloat64NullEmpty(&sql.NullFloat64{1, true})
-			enc.Write()
+			enc.AddSQLNullFloat64NullEmpty(&sql.NullFloat64{Float64: 0, Valid: true})
+			enc.SQLNullFloat64NullEmpty(&sql.NullFloat64{Float64: 1, Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}
 }
 
 func TestEncoderSQLNullFloat64KeyNullEmpty(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name         string
 		baseJSON     string
 		expectedJSON string
@@ -1350,11 +1350,11 @@ func TestEncoderSQLNullFloat64KeyNullEmpty(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			var b strings.Builder
-			var enc = NewEncoder(&b)
+			enc := NewEncoder(&b)
 			enc.writeString(testCase.baseJSON)
-			enc.AddSQLNullFloat64KeyNullEmpty("foo", &sql.NullFloat64{0, true})
-			enc.SQLNullFloat64KeyNullEmpty("bar", &sql.NullFloat64{1, true})
-			enc.Write()
+			enc.AddSQLNullFloat64KeyNullEmpty("foo", &sql.NullFloat64{Float64: 0, Valid: true})
+			enc.SQLNullFloat64KeyNullEmpty("bar", &sql.NullFloat64{Float64: 1, Valid: true})
+			_, _ = enc.Write()
 			assert.Equal(t, testCase.expectedJSON, b.String())
 		})
 	}

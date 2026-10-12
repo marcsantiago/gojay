@@ -5,7 +5,6 @@ import (
 	"math/rand"
 	"net/http"
 	"sync"
-	"time"
 
 	"github.com/marcsantiago/gojay/examples/websocket/comm"
 	"golang.org/x/net/websocket"
@@ -37,7 +36,7 @@ func NewServer() *server {
 }
 
 func (c *Client) Close() {
-	c.Conn.Close()
+	_ = c.Conn.Close()
 }
 
 func (s *server) Handle(conn *websocket.Conn) {
@@ -68,15 +67,14 @@ func (s *server) OnConnection(h func(c *Client)) {
 	s.handle = h
 }
 
-func random(min, max int) int {
-	rand.Seed(time.Now().Unix())
-	return rand.Intn(max-min) + min
+func random(minimum, maximum int) int {
+	return rand.Intn(maximum-minimum) + minimum
 }
 
 func (s *server) BroadCastRandom(sC *Client, m *comm.Message) {
 	m.Message = "Random message"
 	s.mux.RLock()
 	r := random(0, len(s.clients))
-	s.clients[r].SendMessage(m)
+	_ = s.clients[r].SendMessage(m)
 	s.mux.RUnlock()
 }

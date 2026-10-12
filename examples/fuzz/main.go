@@ -10,7 +10,6 @@ type user struct {
 	age     float64
 	name    string
 	email   string
-	friend  *user
 }
 
 // implement gojay.UnmarshalerJSONObject
@@ -32,6 +31,7 @@ func (u *user) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
 	}
 	return nil
 }
+
 func (u *user) NKeys() int {
 	return 3
 }

@@ -61,7 +61,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 	}
-	return
 }
 
 func main() {

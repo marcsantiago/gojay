@@ -9,20 +9,19 @@ import (
 
 type Struct struct {
 	*toolbox.TypeInfo
-	referenced *toolbox.TypeInfo
 	*Generator
 	Alias string
 	Init  string
 	Body  string
 }
 
-//Generate generates decoderCode + structRelease + encoderCode
+// Generate generates decoderCode + structRelease + encoderCode
 func (s *Struct) Generate() (string, error) {
 	return s.generateEncoding(s.TypeInfo)
 }
 
 func (s *Struct) generateEncoding(structInfo *toolbox.TypeInfo) (string, error) {
-	var initEmbedded, decodingCases, err = s.generateFieldDecoding(structInfo.Fields())
+	initEmbedded, decodingCases, err := s.generateFieldDecoding(structInfo.Fields())
 	if err != nil {
 		return "", err
 	}
@@ -31,14 +30,14 @@ func (s *Struct) generateEncoding(structInfo *toolbox.TypeInfo) (string, error) 
 	if err != nil {
 		return "", err
 	}
-	var resetCode = ""
+	resetCode := ""
 	if s.options.PoolObjects {
 		resetCode, err = s.generateReset(structInfo.Fields())
 		if err != nil {
 			return "", err
 		}
 	}
-	var data = struct {
+	data := struct {
 		Receiver      string
 		Alias         string
 		InitEmbedded  string
@@ -61,7 +60,7 @@ func (s *Struct) generateEncoding(structInfo *toolbox.TypeInfo) (string, error) 
 func (s *Struct) generateReset(fields []*toolbox.FieldInfo) (string, error) {
 	fieldReset, err := s.generateFieldReset(fields)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	return expandBlockTemplate(resetStruct, struct {
 		Reset    string
@@ -75,7 +74,7 @@ func (s *Struct) generateReset(fields []*toolbox.FieldInfo) (string, error) {
 func (s *Struct) generateFieldReset(fields []*toolbox.FieldInfo) ([]string, error) {
 	fieldReset := []string{}
 	for i := range fields {
-		var templateKey = -1
+		templateKey := -1
 		fieldTypeInfo := s.Type(normalizeTypeName(fields[i].TypeName))
 		field, err := NewField(s, fields[i], fieldTypeInfo)
 		if err != nil {
@@ -101,14 +100,15 @@ func (s *Struct) generateFieldReset(fields []*toolbox.FieldInfo) ([]string, erro
 }
 
 func (s *Struct) generateFieldDecoding(fields []*toolbox.FieldInfo) (string, []string, error) {
-
 	fieldCases := []string{}
-	var initCode = ""
+	var initCode strings.Builder
 	for i := range fields {
-		if isSkipable(s.options, fields[i]) {
+		if isSkippable(s.options, fields[i]) {
 			continue
 		}
-		var templateKey = -1
+
+		//nolint:ineffassign,wastedassign // Intentionally initialized before subsequent logic.
+		templateKey := -1
 		fieldTypeInfo := s.Type(normalizeTypeName(fields[i].TypeName))
 		field, err := NewField(s, fields[i], fieldTypeInfo)
 		if err != nil {
@@ -127,13 +127,13 @@ func (s *Struct) generateFieldDecoding(fields []*toolbox.FieldInfo) (string, []s
 					if err != nil {
 						return "", nil, err
 					}
-					initCode += init
+					initCode.WriteString(init)
 				}
 				init, embeddedCases, err := s.generateFieldDecoding(fieldTypeInfo.Fields())
 				if err != nil {
 					return "", nil, err
 				}
-				initCode += init
+				initCode.WriteString(init)
 				fieldCases = append(fieldCases, embeddedCases...)
 			}
 			continue
@@ -145,13 +145,13 @@ func (s *Struct) generateFieldDecoding(fields []*toolbox.FieldInfo) (string, []s
 			templateKey = decodeBaseType
 		case "[]string", "[]bool", "[]int", "[]int8", "[]int16", "[]int32", "[]int64", "[]uint", "[]uint8", "[]uint16", "[]uint32", "[]uint64", "[]float32", "[]float64":
 			templateKey = decodeBaseTypeSlice
-			s.generatePrimitiveArray(field)
+			_ = s.generatePrimitiveArray(field)
 		case "[]byte":
 			templateKey = decodeRawType
 		default:
 
 			if fieldTypeInfo != nil {
-				if !(field.IsSlice || fieldTypeInfo.IsSlice) {
+				if !field.IsSlice && !fieldTypeInfo.IsSlice {
 
 					templateKey = decodeStruct
 					break main
@@ -163,7 +163,7 @@ func (s *Struct) generateFieldDecoding(fields []*toolbox.FieldInfo) (string, []s
 					break main
 
 				case "string", "bool", "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "float32", "float64":
-					s.generatePrimitiveArray(field)
+					_ = s.generatePrimitiveArray(field)
 					templateKey = decodeBaseTypeSlice
 					break main
 
@@ -195,7 +195,7 @@ func (s *Struct) generateFieldDecoding(fields []*toolbox.FieldInfo) (string, []s
 				templateKey = k
 			} else {
 				// templateKey = decodeUnknown
-				return "", nil, fmt.Errorf("Unknown type %s for field %s", field.Type, field.Name)
+				return "", nil, fmt.Errorf("unknown type %s for field %s", field.Type, field.Name)
 			}
 		}
 		if templateKey != -1 {
@@ -207,11 +207,11 @@ func (s *Struct) generateFieldDecoding(fields []*toolbox.FieldInfo) (string, []s
 		}
 
 	}
-	return initCode, fieldCases, nil
+	return initCode.String(), fieldCases, nil
 }
 
 func (s *Struct) generateEmbeddedFieldEncoding(field *Field, fieldTypeInfo *toolbox.TypeInfo) ([]string, error) {
-	var result = []string{}
+	result := []string{}
 	if fieldTypeInfo != nil {
 		embeddedCases, err := s.generateFieldEncoding(fieldTypeInfo.Fields())
 		if err != nil {
@@ -233,10 +233,12 @@ func (s *Struct) generateEmbeddedFieldEncoding(field *Field, fieldTypeInfo *tool
 func (s *Struct) generateFieldEncoding(fields []*toolbox.FieldInfo) ([]string, error) {
 	fieldCases := []string{}
 	for i := range fields {
-		if isSkipable(s.options, fields[i]) {
+		if isSkippable(s.options, fields[i]) {
 			continue
 		}
-		var templateKey = -1
+
+		//nolint:ineffassign,wastedassign // Intentionally initialized before subsequent logic.
+		templateKey := -1
 		fieldTypeInfo := s.Type(normalizeTypeName(fields[i].TypeName))
 		field, err := NewField(s, fields[i], fieldTypeInfo)
 		if err != nil {
@@ -256,12 +258,12 @@ func (s *Struct) generateFieldEncoding(fields []*toolbox.FieldInfo) ([]string, e
 			templateKey = encodeBaseType
 		case "[]string", "[]bool", "[]int", "[]int8", "[]int16", "[]int32", "[]int64", "[]uint", "[]uint8", "[]uint16", "[]uint32", "[]uint64", "[]float32", "[]float64":
 			templateKey = encodeBaseTypeSlice
-			s.generatePrimitiveArray(field)
+			_ = s.generatePrimitiveArray(field)
 		case "[]byte":
 			templateKey = encodeRawType
 		default:
 			if fieldTypeInfo != nil {
-				if !(field.IsSlice || fieldTypeInfo.IsSlice) {
+				if !field.IsSlice && !fieldTypeInfo.IsSlice {
 					templateKey = encodeStruct
 					break main
 				}
@@ -281,7 +283,7 @@ func (s *Struct) generateFieldEncoding(fields []*toolbox.FieldInfo) ([]string, e
 				templateKey = k
 			} else {
 				// templateKey = decodeUnknown
-				return nil, fmt.Errorf("Unknown type %s for field %s", field.Type, field.Name)
+				return nil, fmt.Errorf("unknown type %s for field %s", field.Type, field.Name)
 			}
 		}
 		if templateKey != -1 {

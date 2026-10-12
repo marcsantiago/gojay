@@ -28,12 +28,12 @@ func createServer(done chan error) {
 	// set our connection handler
 	s.OnConnection(func(c *server.Client) {
 		// send welcome message to initiate the conversation
-		c.SendMessage(&comm.Message{
+		_ = c.SendMessage(&comm.Message{
 			UserName: "server",
 			Message:  "Welcome !",
 		})
 		// start handling messages
-		c.OnMessage(func(m *comm.Message) {
+		_ = c.OnMessage(func(m *comm.Message) {
 			log.Print("message received from client: ", m)
 			s.BroadCastRandom(c, m)
 		})
@@ -52,9 +52,9 @@ func createClient(url, origin string, i int) {
 	str := strconv.Itoa(i)
 	// Init client's sender and receiver
 	// Set the OnMessage handler
-	c.OnMessage(func(m *comm.Message) {
+	_ = c.OnMessage(func(m *comm.Message) {
 		log.Print("client "+str+" received from "+m.UserName+" message: ", m)
-		c.SendMessage(&comm.Message{
+		_ = c.SendMessage(&comm.Message{
 			UserName: str,
 			Message:  "Responding to: " + m.UserName + " | old message: " + m.Message,
 		})
@@ -66,8 +66,7 @@ func main() {
 	done := make(chan error)
 	createServer(done)
 	// add our clients connection
-	for i := 0; i < 100; i++ {
-		i := i
+	for i := range 100 {
 		go createClient("ws://localhost:8070/ws", "http://localhost/", i)
 	}
 	// handle server's termination

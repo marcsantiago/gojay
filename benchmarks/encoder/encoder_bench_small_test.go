@@ -71,6 +71,6 @@ func TestGoJayEncodeSmallStruct(t *testing.T) {
 	if output, err := gojay.MarshalJSONObject(benchmarks.NewSmallPayload()); err != nil {
 		t.Fatal(err)
 	} else {
-		log.Print(output)
+		log.Print(string(output))
 	}
 }

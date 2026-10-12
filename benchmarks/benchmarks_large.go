@@ -17,61 +17,68 @@ func (m *DSUser) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
 	}
 	return nil
 }
+
 func (m *DSUser) NKeys() int {
 	return 1
 }
+
 func (m *DSUser) IsNil() bool {
 	return m == nil
 }
+
 func (m *DSUser) MarshalJSONObject(enc *gojay.Encoder) {
 	enc.AddStringKey("username", m.Username)
 }
 
 type DSTopic struct {
-	Id   int
+	ID   int
 	Slug string
 }
 
 func (m *DSTopic) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
 	switch key {
 	case "id":
-		return dec.AddInt(&m.Id)
+		return dec.AddInt(&m.ID)
 	case "slug":
 		return dec.AddString(&m.Slug)
 	}
 	return nil
 }
+
 func (m *DSTopic) NKeys() int {
 	return 2
 }
+
 func (m *DSTopic) IsNil() bool {
 	return m == nil
 }
+
 func (m *DSTopic) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.AddIntKey("id", m.Id)
+	enc.AddIntKey("id", m.ID)
 	enc.AddStringKey("slug", m.Slug)
 }
 
 type DSTopics []*DSTopic
 
-func (t *DSTopics) UnmarshalJSONArray(dec *gojay.Decoder) error {
+func (d *DSTopics) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	dsTopic := &DSTopic{}
-	*t = append(*t, dsTopic)
+	*d = append(*d, dsTopic)
 	return dec.AddObject(dsTopic)
 }
 
-func (m *DSTopics) MarshalJSONArray(enc *gojay.Encoder) {
-	for _, e := range *m {
+func (d *DSTopics) MarshalJSONArray(enc *gojay.Encoder) {
+	for _, e := range *d {
 		enc.AddObject(e)
 	}
 }
-func (m *DSTopics) IsNil() bool {
-	return m == nil
+
+func (d *DSTopics) IsNil() bool {
+	return d == nil
 }
 
 type DSTopicsList struct {
 	Topics        DSTopics
-	MoreTopicsUrl string
+	MoreTopicsURL string
 }
 
 func (m *DSTopicsList) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
@@ -80,10 +87,11 @@ func (m *DSTopicsList) UnmarshalJSONObject(dec *gojay.Decoder, key string) error
 		m.Topics = DSTopics{}
 		return dec.AddArray(&m.Topics)
 	case "more_topics_url":
-		return dec.AddString(&m.MoreTopicsUrl)
+		return dec.AddString(&m.MoreTopicsURL)
 	}
 	return nil
 }
+
 func (m *DSTopicsList) NKeys() int {
 	return 2
 }
@@ -94,24 +102,25 @@ func (m *DSTopicsList) IsNil() bool {
 
 func (m *DSTopicsList) MarshalJSONObject(enc *gojay.Encoder) {
 	enc.AddArrayKey("users", &m.Topics)
-	enc.AddStringKey("more_topics_url", m.MoreTopicsUrl)
+	enc.AddStringKey("more_topics_url", m.MoreTopicsURL)
 }
 
 type DSUsers []*DSUser
 
-func (t *DSUsers) UnmarshalJSONArray(dec *gojay.Decoder) error {
+func (d *DSUsers) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	dsUser := DSUser{}
-	*t = append(*t, &dsUser)
+	*d = append(*d, &dsUser)
 	return dec.AddObject(&dsUser)
 }
 
-func (m *DSUsers) MarshalJSONArray(enc *gojay.Encoder) {
-	for _, e := range *m {
+func (d *DSUsers) MarshalJSONArray(enc *gojay.Encoder) {
+	for _, e := range *d {
 		enc.AddObject(e)
 	}
 }
-func (m *DSUsers) IsNil() bool {
-	return m == nil
+
+func (d *DSUsers) IsNil() bool {
+	return d == nil
 }
 
 type LargePayload struct {
@@ -151,7 +160,7 @@ var LargeFixture = []byte(`
 func NewLargePayload() *LargePayload {
 	dsUsers := DSUsers{}
 	dsTopics := DSTopics{}
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		str := "test" + strconv.Itoa(i)
 		dsUsers = append(
 			dsUsers,
@@ -162,7 +171,7 @@ func NewLargePayload() *LargePayload {
 		dsTopics = append(
 			dsTopics,
 			&DSTopic{
-				Id:   i,
+				ID:   i,
 				Slug: str,
 			},
 		)
@@ -171,7 +180,7 @@ func NewLargePayload() *LargePayload {
 		Users: dsUsers,
 		Topics: &DSTopicsList{
 			Topics:        dsTopics,
-			MoreTopicsUrl: "http://test.com",
+			MoreTopicsURL: "http://test.com",
 		},
 	}
 }

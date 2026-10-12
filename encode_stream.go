@@ -14,7 +14,7 @@ type MarshalerStream interface {
 
 // A StreamEncoder reads and encodes values to JSON from an input stream.
 //
-// It implements conext.Context and provide a channel to notify interruption.
+// It implements context.Context and provide a channel to notify interruption.
 type StreamEncoder struct {
 	mux *sync.RWMutex
 	*Encoder
@@ -55,7 +55,6 @@ func (s *StreamEncoder) EncodeStream(m MarshalerStream) {
 		}
 		s.mux.RUnlock()
 	}
-	return
 }
 
 // LineDelimited sets the delimiter to a new line character.
@@ -117,7 +116,7 @@ func (s *StreamEncoder) SetDeadline(t time.Time) {
 }
 
 // Value implements context.Context
-func (s *StreamEncoder) Value(key interface{}) interface{} {
+func (s *StreamEncoder) Value(key any) any {
 	return nil
 }
 
@@ -127,7 +126,7 @@ func (s *StreamEncoder) Value(key interface{}) interface{} {
 func (s *StreamEncoder) Cancel(err error) {
 	s.mux.Lock()
 	defer s.mux.Unlock()
-	
+
 	select {
 	case <-s.done:
 	default:
@@ -142,38 +141,38 @@ func (s *StreamEncoder) AddObject(v MarshalerJSONObject) {
 	if v.IsNil() {
 		return
 	}
-	s.Encoder.writeByte('{')
+	s.writeByte('{')
 	v.MarshalJSONObject(s.Encoder)
-	s.Encoder.writeByte('}')
-	s.Encoder.writeByte(s.delimiter)
+	s.writeByte('}')
+	s.writeByte(s.delimiter)
 }
 
 // AddString adds a string to be encoded.
 func (s *StreamEncoder) AddString(v string) {
-	s.Encoder.writeByte('"')
-	s.Encoder.writeString(v)
-	s.Encoder.writeByte('"')
-	s.Encoder.writeByte(s.delimiter)
+	s.writeByte('"')
+	s.writeString(v)
+	s.writeByte('"')
+	s.writeByte(s.delimiter)
 }
 
 // AddArray adds an implementation of MarshalerJSONArray to be encoded.
 func (s *StreamEncoder) AddArray(v MarshalerJSONArray) {
-	s.Encoder.writeByte('[')
+	s.writeByte('[')
 	v.MarshalJSONArray(s.Encoder)
-	s.Encoder.writeByte(']')
-	s.Encoder.writeByte(s.delimiter)
+	s.writeByte(']')
+	s.writeByte(s.delimiter)
 }
 
 // AddInt adds an int to be encoded.
 func (s *StreamEncoder) AddInt(value int) {
 	s.buf = strconv.AppendInt(s.buf, int64(value), 10)
-	s.Encoder.writeByte(s.delimiter)
+	s.writeByte(s.delimiter)
 }
 
 // AddFloat64 adds a float64 to be encoded.
 func (s *StreamEncoder) AddFloat64(value float64) {
 	s.buf = strconv.AppendFloat(s.buf, value, 'f', -1, 64)
-	s.Encoder.writeByte(s.delimiter)
+	s.writeByte(s.delimiter)
 }
 
 // AddFloat adds a float64 to be encoded.
@@ -191,11 +190,11 @@ func consume(init *StreamEncoder, s *StreamEncoder, m MarshalerStream) {
 			return
 		default:
 			m.MarshalStream(s)
-			if s.Encoder.err != nil {
-				init.Cancel(s.Encoder.err)
+			if s.err != nil {
+				init.Cancel(s.err)
 				return
 			}
-			i, err := s.Encoder.Write()
+			i, err := s.Write()
 			if err != nil || i == 0 {
 				init.Cancel(err)
 				return

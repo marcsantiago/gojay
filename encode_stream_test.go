@@ -77,7 +77,6 @@ func (s StreamChanError) MarshalStream(enc *StreamEncoder) {
 
 // TestWriter to assert result
 type TestWriter struct {
-	nWrite *int
 	target int
 	enc    *StreamEncoder
 	result [][]byte
@@ -97,45 +96,44 @@ func (w *TestWriter) Write(b []byte) (int, error) {
 }
 
 func feedStreamNil(s chan *testObject, target int) {
-	for i := 0; i < target; i++ {
+	for range target {
 		s <- nil
 	}
 }
 
 func feedStream(s chan *testObject, target int) {
-	for i := 0; i < target; i++ {
+	for range target {
 		s <- &testObject{}
 	}
 }
 
 func feedStreamSlices(s chan *TestEncodingArrStrings, target int) {
-	for i := 0; i < target; i++ {
+	for range target {
 		s <- &TestEncodingArrStrings{"test", "test2"}
 	}
 }
 
 func feedStreamStrings(s chan string, target int) {
-	for i := 0; i < target; i++ {
+	for range target {
 		s <- "hello"
 	}
 }
 
 func feedStreamInt(s chan int, target int) {
-	for i := 0; i < target; i++ {
+	for i := range target {
 		s <- i
 	}
 }
 
 func feedStreamFloat(s chan float64, target int) {
-	for i := 0; i < target; i++ {
+	for i := range target {
 		s <- float64(i)
 	}
 }
 
 func TestEncodeStream(t *testing.T) {
 	t.Run("single-consumer-object", func(t *testing.T) {
-		expectedStr :=
-			`{"testStr":"","testInt":0,"testInt64":0,"testInt32":0,"testInt16":0,"testInt8":0,"testUint64":0,"testUint32":0,"testUint16":0,"testUint8":0,"testFloat64":0,"testFloat32":0,"testBool":false}
+		expectedStr := `{"testStr":"","testInt":0,"testInt64":0,"testInt32":0,"testInt16":0,"testInt8":0,"testUint64":0,"testUint32":0,"testUint16":0,"testUint8":0,"testFloat64":0,"testFloat32":0,"testBool":false}
 `
 		// create our writer
 		w := &TestWriter{target: 100, mux: &sync.RWMutex{}}
@@ -144,19 +142,16 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanObject(make(chan *testObject))
 		go enc.EncodeStream(s)
 		go feedStream(s, 100)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 100, "w.result should be 100")
-			for _, b := range w.result {
-				assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
-			}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 100, "w.result should be 100")
+		for _, b := range w.result {
+			assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
 		}
 	})
 
 	t.Run("single-consumer-slice", func(t *testing.T) {
-		expectedStr :=
-			`["test","test2"]
+		expectedStr := `["test","test2"]
 `
 		// create our writer
 		w := &TestWriter{target: 100, mux: &sync.RWMutex{}}
@@ -165,19 +160,16 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanSlice(make(chan *TestEncodingArrStrings))
 		go enc.EncodeStream(s)
 		go feedStreamSlices(s, 100)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 100, "w.result should be 100")
-			for _, b := range w.result {
-				assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
-			}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 100, "w.result should be 100")
+		for _, b := range w.result {
+			assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
 		}
 	})
 
 	t.Run("single-consumer-string", func(t *testing.T) {
-		expectedStr :=
-			`"hello"
+		expectedStr := `"hello"
 `
 		// create our writer
 		w := &TestWriter{target: 100, mux: &sync.RWMutex{}}
@@ -186,13 +178,11 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanString(make(chan string))
 		go enc.EncodeStream(s)
 		go feedStreamStrings(s, 100)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 100, "w.result should be 100")
-			for _, b := range w.result {
-				assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
-			}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 100, "w.result should be 100")
+		for _, b := range w.result {
+			assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
 		}
 	})
 
@@ -205,13 +195,11 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanObject(make(chan *testObject))
 		go enc.EncodeStream(s)
 		go feedStreamNil(s, 100)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Nil(t, enc.Err(), "enc.Err() should not be nil")
-			for _, b := range w.result {
-				assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
-			}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Nil(t, enc.Err(), "enc.Err() should not be nil")
+		for _, b := range w.result {
+			assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
 		}
 	})
 
@@ -223,11 +211,9 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanInt(make(chan int))
 		go enc.EncodeStream(s)
 		go feedStreamInt(s, 100)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 100, "w.result should be 100")
-		}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 100, "w.result should be 100")
 	})
 
 	t.Run("single-consumer-float", func(t *testing.T) {
@@ -238,11 +224,9 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanFloat(make(chan float64))
 		go enc.EncodeStream(s)
 		go feedStreamFloat(s, 100)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 100, "w.result should be 100")
-		}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 100, "w.result should be 100")
 	})
 
 	t.Run("single-consumer-marshal-error", func(t *testing.T) {
@@ -253,10 +237,8 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanError(make(chan *testObject))
 		go enc.EncodeStream(s)
 		go feedStream(s, 100)
-		select {
-		case <-enc.Done():
-			assert.NotNil(t, enc.Err(), "enc.Err() should not be nil")
-		}
+		<-enc.Done()
+		assert.NotNil(t, enc.Err(), "enc.Err() should not be nil")
 	})
 
 	t.Run("single-consumer-write-error", func(t *testing.T) {
@@ -266,15 +248,12 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanObject(make(chan *testObject))
 		go enc.EncodeStream(s)
 		go feedStream(s, 100)
-		select {
-		case <-enc.Done():
-			assert.NotNil(t, enc.Err(), "enc.Err() should not be nil")
-		}
+		<-enc.Done()
+		assert.NotNil(t, enc.Err(), "enc.Err() should not be nil")
 	})
 
 	t.Run("multiple-consumer-object-comma-delimited", func(t *testing.T) {
-		expectedStr :=
-			`{"testStr":"","testInt":0,"testInt64":0,"testInt32":0,"testInt16":0,"testInt8":0,"testUint64":0,"testUint32":0,"testUint16":0,"testUint8":0,"testFloat64":0,"testFloat32":0,"testBool":false},`
+		expectedStr := `{"testStr":"","testInt":0,"testInt64":0,"testInt32":0,"testInt16":0,"testInt8":0,"testUint64":0,"testUint32":0,"testUint16":0,"testUint8":0,"testFloat64":0,"testFloat32":0,"testBool":false},`
 		// create our writer
 		w := &TestWriter{target: 5000, mux: &sync.RWMutex{}}
 		enc := Stream.BorrowEncoder(w).NConsumer(50).CommaDelimited()
@@ -282,19 +261,16 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanObject(make(chan *testObject))
 		go enc.EncodeStream(s)
 		go feedStream(s, 5000)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 5000, "w.result should be 100")
-			for _, b := range w.result {
-				assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
-			}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 5000, "w.result should be 100")
+		for _, b := range w.result {
+			assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
 		}
 	})
 
 	t.Run("multiple-consumer-object-line-delimited", func(t *testing.T) {
-		expectedStr :=
-			`{"testStr":"","testInt":0,"testInt64":0,"testInt32":0,"testInt16":0,"testInt8":0,"testUint64":0,"testUint32":0,"testUint16":0,"testUint8":0,"testFloat64":0,"testFloat32":0,"testBool":false}
+		expectedStr := `{"testStr":"","testInt":0,"testInt64":0,"testInt32":0,"testInt16":0,"testInt8":0,"testUint64":0,"testUint32":0,"testUint16":0,"testUint8":0,"testFloat64":0,"testFloat32":0,"testBool":false}
 `
 		// create our writer
 		w := &TestWriter{target: 5000, mux: &sync.RWMutex{}}
@@ -303,13 +279,11 @@ func TestEncodeStream(t *testing.T) {
 		s := StreamChanObject(make(chan *testObject))
 		go feedStream(s, 5000)
 		go enc.EncodeStream(s)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 5000, "w.result should be 100")
-			for _, b := range w.result {
-				assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
-			}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 5000, "w.result should be 100")
+		for _, b := range w.result {
+			assert.Equal(t, expectedStr, string(b), "every byte buffer should be equal to expected string")
 		}
 	})
 
@@ -322,11 +296,9 @@ func TestEncodeStream(t *testing.T) {
 		close(enc.done)
 		go feedStream(s, 5000)
 		go enc.EncodeStream(s)
-		select {
-		case <-enc.Done():
-			assert.Nil(t, enc.Err(), "enc.Err() should be nil")
-			assert.Len(t, w.result, 0, "w.result should be 0")
-		}
+		<-enc.Done()
+		assert.Nil(t, enc.Err(), "enc.Err() should be nil")
+		assert.Len(t, w.result, 0, "w.result should be 0")
 	})
 
 	t.Run("encoder-deadline", func(t *testing.T) {
